@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	porg.spec \
 	download.png \
 	index.html \
+	grop.svg \
 	grop.png
 
 man_MANS = \
