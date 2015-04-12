@@ -192,6 +192,9 @@ void BasePkg::log_file(string const& path)
 	m_nfiles++;
 
 	// detect hardlinks to installed files, to count their size only once
+	
+	assert(file->inode() > 0);
+	
 	if (m_inodes.find(file->inode()) == m_inodes.end()) {
 		m_inodes.insert(file->inode());
 		m_size += file->size();
