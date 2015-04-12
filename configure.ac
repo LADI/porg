@@ -76,7 +76,7 @@ AM_CONDITIONAL([ENABLE_GROP], [test "$enable_grop" = yes])
 
 AM_PROG_AR
 LT_INIT
-#AC_PROG_SED
+AC_PROG_SED
 AC_PROG_CC
 AC_PROG_CXX
 
@@ -124,7 +124,7 @@ if test "$GXX" = yes; then
 	MY_CXXFLAGS="$MY_CXXFLAGS -ansi -pedantic -Wno-long-long -Wmissing-declarations -fno-operator-names -Wall"
 fi
 
-if test "$PACKAGE_VERSION" = svn; then
+if echo "$PACKAGE_VERSION" | grep -q svn; then
 	MY_CFLAGS="$MY_CFLAGS -Werror"
 	MY_CXXFLAGS="$MY_CXXFLAGS -Werror"
 fi
