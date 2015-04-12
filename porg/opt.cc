@@ -30,9 +30,7 @@ namespace Porg
 	bool Opt::s_exact_version = false;
 	bool Opt::s_print_sizes = false;
 	bool Opt::s_print_nfiles = false;
-	bool Opt::s_print_nfiles_miss = false;
 	bool Opt::s_list_files = false;
-	bool Opt::s_list_files_miss = false;
 	bool Opt::s_print_totals = false;
 	bool Opt::s_print_symlinks = false;
 	bool Opt::s_print_no_pkg_name = false;
@@ -87,8 +85,6 @@ Opt::Opt(int argc, char* argv[])
 		OPT_INFO			= 'i',
 		OPT_LOGDIR			= 'L',
 		OPT_LOG				= 'l',
-		OPT_FILES_MISS		= 'm',
-		OPT_NFILES_MISS		= 'M',
 		OPT_CONF_OPTS		= 'o',
 		OPT_PACKAGE			= 'p',
 		OPT_LOG_MISSING		= 'j',
@@ -120,9 +116,7 @@ Opt::Opt(int argc, char* argv[])
 		{ "sort", 				1, 0, OPT_SORT },
 		{ "size", 				0, 0, OPT_SIZE },
 		{ "nfiles", 			0, 0, OPT_NFILES },
-		{ "nfiles-miss",		0, 0, OPT_NFILES_MISS },
 		{ "files", 				0, 0, OPT_FILES },
-		{ "files-miss", 		0, 0, OPT_FILES_MISS },
 		{ "reverse", 			0, 0, OPT_REVERSE },
 		{ "total", 				0, 0, OPT_TOTAL },
 		{ "symlinks", 			0, 0, OPT_SYMLINKS },
@@ -184,7 +178,6 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_INFO: 		set_mode(MODE_INFO, c); break;
 			case OPT_CONF_OPTS:	set_mode(MODE_CONF_OPTS, c); break;
 			case OPT_QUERY: 	set_mode(MODE_QUERY, c); break;
-			case OPT_FILES_MISS:
 			case OPT_FILES: 	set_mode(MODE_LIST_FILES, c); break;
 			case OPT_LOG: 		set_mode(MODE_LOG, c); break;
 			case OPT_REMOVE:	set_mode(MODE_REMOVE, c); break;
@@ -243,10 +236,6 @@ Opt::Opt(int argc, char* argv[])
 				s_list_files = true;
 				break;
 
-			case OPT_FILES_MISS:
-				s_list_files_miss = true;
-				break;
-
 			case OPT_DATE:
 				check_mode(MODE_LIST_PKGS, c);
 				s_print_hour = s_print_date; 
@@ -256,11 +245,6 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_NFILES:
 				check_mode(MODE_LIST_PKGS, c);
 				s_print_nfiles = true; 
-				break;
-
-			case OPT_NFILES_MISS:
-				check_mode(MODE_LIST_PKGS, c);
-				s_print_nfiles_miss = true; 
 				break;
 
 			case OPT_SYMLINKS:
@@ -324,7 +308,7 @@ Opt::Opt(int argc, char* argv[])
 		switch (c) {
 
 			case OPT_SYMLINKS:
-				check_required(c, string(1, OPT_FILES) + OPT_FILES_MISS);
+				check_required(c, string(1, OPT_FILES));
 				break;
 
 			case OPT_SKIP:
@@ -349,12 +333,12 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_NO_PACKAGE_NAME:
 				if (s_mode == MODE_LIST_PKGS) {
 					check_required(c, string(1, OPT_SIZE) + OPT_NFILES 
-					+ OPT_NFILES_MISS + OPT_DATE + OPT_FILES + OPT_FILES_MISS);
+						+ OPT_DATE + OPT_FILES);
 				}
 				break;
 
 			case OPT_TOTAL:
-				check_required(c, string(1, OPT_SIZE) + OPT_NFILES + OPT_NFILES_MISS);
+				check_required(c, string(1, OPT_SIZE) + OPT_NFILES);
 				break;
 
 		}
@@ -452,8 +436,6 @@ void Opt::set_sort_type(string const& s)
 		s_sort_type = SORT_BY_DATE;
 	else if (!s.compare(0, s.size(), "files", s.size()))
 		s_sort_type = SORT_BY_NFILES;
-	else if (!s.compare(0, s.size(), "files-miss", s.size()))
-		s_sort_type = SORT_BY_NFILES_MISS;
 	else if (!s.compare(0, s.size(), "name", s.size()))
 		s_sort_type = SORT_BY_NAME;
 	else
@@ -462,7 +444,6 @@ void Opt::set_sort_type(string const& s)
 	switch (s_sort_type) {
 		case SORT_BY_DATE:
 		case SORT_BY_NFILES:
-		case SORT_BY_NFILES_MISS:
 			if (s_mode != MODE_LIST_PKGS)
 				die_help("'" + s + "': Invalid argument for option '-S|--sort'");
 		default: break;
@@ -491,12 +472,9 @@ cout <<
 "  -d, --date               Print the installation day (-dd prints the hour too).\n"
 "  -s, --size               Print the installed size of the package.\n"
 "  -F, --nfiles             Print the number of installed files.\n"
-"  -M, --nfiles-miss        Print the number of missing files.\n"
-"  -S, --sort=WORD          Sort by WORD: 'name', 'date', 'size', 'files' or\n"
-"                           'files-miss'.\n\n"
+"  -S, --sort=WORD          Sort by WORD: 'name', 'date', 'size' or 'files'.\n\n"
 "File list options:\n"
 "  -f, --files              List the files installed by the package.\n"
-"  -m, --files-miss         List the missing files of the package.\n"
 "  -s, --size               Print the size of each file.\n"
 "  -y, --symlinks           Print the contents of symbolic links.\n"
 "  -S, --sort=WORD          Sort by WORD: 'name' or 'size'.\n\n"

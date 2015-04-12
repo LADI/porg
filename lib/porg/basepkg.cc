@@ -14,6 +14,7 @@
 #include <fstream>
 #include <algorithm>
 #include <sstream>
+#include <iomanip>
 
 using std::string;
 using namespace Porg;
@@ -32,7 +33,6 @@ BasePkg::BasePkg(string const& name_)
 	m_date(time(0)),
 	m_size(0),
 	m_nfiles(0),
-	m_nfiles_miss(0),
 	m_icon_path(),
 	m_url(),
 	m_license(),
@@ -44,66 +44,66 @@ BasePkg::BasePkg(string const& name_)
 { }
 
 
+//
+// Read info line from log
+// Each info line has the form '#<char>:<value>', where 
+// 		<char> is a single character defining the info field, and 
+// 		<value> is its value.
+//
+void BasePkg::read_info_line(string const& buf)
+{
+	if (buf.size() < 3) {
+		assert(buf.size() > 2);
+		return;
+	}
+
+	string val(buf.substr(3));
+
+	switch (buf[1]) {
+
+		case CODE_DATE: 		m_date = str2num<int>(val);		break;
+		case CODE_SIZE: 		m_size = str2num<float>(val);	break;
+		case CODE_NFILES: 		m_nfiles = str2num<ulong>(val);	break;
+		case CODE_CONF_OPTS:	m_conf_opts = val; 				break;
+		case CODE_ICON_PATH:	m_icon_path = val;				break;
+		case CODE_SUMMARY: 		m_summary = val; 				break;
+		case CODE_URL: 			m_url = val; 					break;
+		case CODE_LICENSE: 		m_license = val; 				break;
+		case CODE_AUTHOR: 		m_author = val;					break;
+		case CODE_DESCRIPTION:
+			if (!m_description.empty())
+				m_description += "\n";
+			m_description += val;
+			break;
+		
+		default: assert(false);
+	}
+}
+	
+
 void BasePkg::read_log()
 {
-	// read '#!porg' header or die
-	
 	FileStream<std::ifstream> f(m_log);
 	string buf;
+	
 	if (!(getline(f, buf) && buf.find("#!porg") == 0))
 		throw Error(m_log + ": '#!porg' header missing");
 
-	int db_version = str2num<int>(buf.substr(7, 1));
+	Rexp re("^(/.+)\\|([0-9]+)\\|(.*)$");
 
-	//
-	// Read info header.
-	// Each line in the header has the form '#<char>:<value>', where <char> is
-	// a single character defining the info field, and <value> is its value.
-	//
+	while (getline(f, buf)) {
 
-	while (getline(f, buf) && buf[0] == '#') {
-
-		if (buf.size() < 3) {
-			assert(buf.size() > 2);
+		if (buf[0] == '#')
+			read_info_line(buf);
+		
+		else if (re.exec(buf)) {
+			m_files.push_back(new File(re.match(1),	
+				str2num<ulong>(re.match(2)), re.match(3)));
+		}
+		else {
+			assert(re.exec(buf));
 			continue;
 		}
-
-		string val(buf.substr(3));
-
-		switch (buf[1]) {
-
-			case CODE_DATE: 		m_date = str2num<int>(val);		break;
-			case CODE_CONF_OPTS:	m_conf_opts = val; 				break;
-			case CODE_ICON_PATH:	m_icon_path = val;				break;
-			case CODE_SUMMARY: 		m_summary = val; 				break;
-			case CODE_URL: 			m_url = val; 					break;
-			case CODE_LICENSE: 		m_license = val; 				break;
-			case CODE_AUTHOR: 		m_author = val;					break;
-			case CODE_DESCRIPTION:
-				if (!m_description.empty())
-					m_description += "\n";
-				m_description += val;
-				break;
-		}
-	}
-
-	// Read list of logged files
-
-	if (f.eof() || buf[0] != '/')
-		return;
-
-	if (db_version == 0) { 	// old format
-		string::size_type p;
-		do { 
-			if ((p = buf.find("|")) != string::npos)
-				buf.erase(p);
-			add_file(buf);
-		}
-		while (getline(f, buf) && buf[0] == '/');
-	}
-	else {
-		do { add_file(buf); }
-		while (getline(f, buf) && buf[0] == '/');
 	}
 
 	sort_files();
@@ -167,6 +167,8 @@ void BasePkg::write_log() const
 
 	of	<< "#!porg-" PACKAGE_VERSION "\n"
 		<< '#' << CODE_DATE 		<< ':' << m_date << '\n'
+		<< '#' << CODE_SIZE 		<< ':' << std::setprecision(0) << std::fixed << m_size << '\n'
+		<< '#' << CODE_NFILES       << ':' << m_nfiles << '\n'
 		<< '#' << CODE_AUTHOR		<< ':' << m_author << '\n'
 		<< '#' << CODE_SUMMARY		<< ':' << Porg::strip_trailing(m_summary, '.') << '\n'
 		<< '#' << CODE_URL			<< ':' << m_url << '\n'
@@ -178,25 +180,22 @@ void BasePkg::write_log() const
 	// write installed files
 	
 	for (const_iter f(m_files.begin()); f != m_files.end(); ++f)
-		of << (*f)->name() << '\n';
+		of << (*f)->name() << '|' << (*f)->size() << '|' << (*f)->ln_name() << '\n';
 }
 
 
-void BasePkg::add_file(string const& path)
+void BasePkg::log_file(string const& path)
 {
 	File* file = new File(path);
 	m_files.push_back(file);
 
-	if (file->is_installed()) {
-		m_nfiles++;
-		// detect hardlinks to installed files, to count their size only once
-		if (m_inodes.find(file->inode()) == m_inodes.end()) {
-			m_inodes.insert(file->inode());
-			m_size += file->size();
-		}
+	m_nfiles++;
+
+	// detect hardlinks to installed files, to count their size only once
+	if (m_inodes.find(file->inode()) == m_inodes.end()) {
+		m_inodes.insert(file->inode());
+		m_size += file->size();
 	}
-	else
-		m_nfiles_miss++;
 }
 
 

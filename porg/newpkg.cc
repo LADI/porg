@@ -29,7 +29,7 @@ NewPkg::NewPkg(string const& name_, set<string> const& files_)
 	BasePkg(name_)
 {
 	for (set<string>::const_iterator f(files_.begin()); f != files_.end(); ++f)
-		add_file(*f);
+		log_file(*f);
 	
 	if (m_files.empty())
 		throw Error(m_name + ": No files to log");;

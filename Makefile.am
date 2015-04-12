@@ -32,7 +32,7 @@ logme:
 	for dir in $(SUBDIRS); do \
 	  ( cd $$dir && $(MAKE) $@ ) 2>/dev/null; \
 	done && \
-	echo && porg -vvxfmsty porg-$(PACKAGE_VERSION)
+	echo && porg -vvxfsty porg-$(PACKAGE_VERSION)
 
 ## Download SVN snapshot (Read Only)
 svn-ro:

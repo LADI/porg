@@ -14,7 +14,6 @@ sed_cmd=@SED@
 warn()			{ echo "$me: $*" >&2; exit_status=1; }
 die()			{ warn "$*"; exit 1; }
 say()			{ [ "$opt_verb" ] && echo "$*"; }
-do_version() 	{ porg -V | $sed_cmd "s/^porg/$me/"; exit 0; }
 
 
 do_help()
@@ -176,7 +175,7 @@ while [ "$1" ]; do
 
 	case $1 in
 
-		-V|--version)		 do_version;;
+		-V|--version)		 porg --version | $sed_cmd "s/^porg/$me/"; exit 0;;
 		-h|--help)			 do_help;;
 		-t|--test)			 opt_test=-t;;
 		-v|--verbose)		 opt_verb=-v;;

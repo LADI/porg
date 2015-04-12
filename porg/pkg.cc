@@ -56,7 +56,7 @@ void Pkg::append(set<string> const& files_)
 
 	for (set<string>::const_iterator f(files_.begin()); f != files_.end(); ++f) {
 		if (!find_file(*f)) {
-			add_file(*f);
+			log_file(*f);
 			appended = true;
 		}
 	}
@@ -80,16 +80,13 @@ void Pkg::unlog() const
 }
 
 
-void Pkg::list(int size_w, int nfiles_w, int nfiles_miss_w) const
+void Pkg::list(int size_w, int nfiles_w) const
 {
 	if (Opt::print_sizes())
 		cout << setw(size_w) << fmt_size(m_size) << "  ";
 
 	if (Opt::print_nfiles())
 		cout << setw(nfiles_w) << m_nfiles << "  ";
-
-	if (Opt::print_nfiles_miss())
-		cout << "(" << setw(nfiles_miss_w) << m_nfiles_miss << ")  ";
 
 	if (Opt::print_date())
 		cout << fmt_date(m_date, Opt::print_hour()) << "  ";
@@ -110,11 +107,7 @@ void Pkg::list_files(int size_w)
 
 	for (const_iter f(m_files.begin()); f != m_files.end(); ++f) {
 		
-		if (((*f)->is_installed() && !Opt::list_files())
-		|| (!(*f)->is_installed() && !Opt::list_files_miss()))
-			continue;
-
-		else if (Opt::print_sizes())
+		if (Opt::print_sizes())
 			cout << setw(size_w) << fmt_size((*f)->size()) << "  ";
 
 		cout << (*f)->name();

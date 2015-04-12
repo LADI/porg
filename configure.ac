@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_INIT([porg],[1.0-svn],[http://porg.sourceforge.net])
+AC_INIT([porg],[svn],[http://porg.sourceforge.net])
 
 #RELEASEDATE="16 June 2014"
 RELEASEDATE="`date +'%d %B %Y'`"

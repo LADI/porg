@@ -12,11 +12,13 @@
 using std::string;
 
 
+//
+// Ctor. for newly logged files
+//
 Porg::File::File(string const& name_)
 :
 	m_name(name_),
 	m_size(0),
-	m_installed(false),
 	m_inode(0),
 	m_ln_name()
 {
@@ -35,7 +37,18 @@ Porg::File::File(string const& name_)
 	}
 
 	m_inode = s.st_ino;
-	m_installed = true;
 	m_size = s.st_size;
 }
+
+
+//
+// Ctor. for files read from database
+//
+Porg::File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
+:
+	m_name(name_),
+	m_size(size_),
+	m_inode(0),
+	m_ln_name(ln_name_)
+{ }
 

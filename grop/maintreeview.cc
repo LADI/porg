@@ -54,10 +54,6 @@ void MainTreeView::add_columns()
 	cell = get_column_cell_renderer(id);
 	cell->set_alignment(1, 0.5);
 
-	id = append_column("Files miss.", m_columns.m_nfiles_miss) - 1;
-	cell = get_column_cell_renderer(id);
-	cell->set_alignment(1, 0.5);
-
 	id = append_column("Date", m_columns.m_date) - 1;
 	cell = get_column_cell_renderer(id);
 	cell->set_alignment(1, 0.5);
@@ -103,7 +99,6 @@ void MainTreeView::fill_model()
 		(*i)[m_columns.m_name] 			= (*p)->name();
 		(*i)[m_columns.m_size] 			= (*p)->size();
 		(*i)[m_columns.m_nfiles] 		= (*p)->nfiles();
-		(*i)[m_columns.m_nfiles_miss] 	= (*p)->nfiles_miss();
 		(*i)[m_columns.m_date] 			= (*p)->date();
 		(*i)[m_columns.m_summary] 		= (*p)->summary();
 	}

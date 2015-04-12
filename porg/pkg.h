@@ -30,7 +30,7 @@ class Pkg : public BasePkg
 	void remove(DB const&);
 	void print_conf_opts(bool print_pkg_name) const;
 	void print_info() const;
-	void list(int, int, int) const;
+	void list(int, int) const;
 	void list_files(int size_w);
 	void append(std::set<std::string> const& files);
 

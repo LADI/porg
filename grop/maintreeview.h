@@ -30,7 +30,6 @@ class MainTreeView : public Gtk::TreeView
 			add(m_name);
 			add(m_size);
 			add(m_nfiles);
-			add(m_nfiles_miss);
 			add(m_date);
 			add(m_summary);
 			add(m_pkg);
@@ -41,7 +40,6 @@ class MainTreeView : public Gtk::TreeView
 		Gtk::TreeModelColumn<float>			m_size;
 		Gtk::TreeModelColumn<int>			m_date;
 		Gtk::TreeModelColumn<gulong>		m_nfiles;
-		Gtk::TreeModelColumn<gulong>		m_nfiles_miss;
 		Gtk::TreeModelColumn<Glib::ustring>	m_summary;
 
 	};	// class MainTreeView::ModelColumns
@@ -54,7 +52,6 @@ class MainTreeView : public Gtk::TreeView
 		COL_NAME,
 		COL_SIZE,
 		COL_NFILES,
-		COL_NFILES_MISS,
 		COL_DATE,
 		COL_SUMMARY,
 		NCOLS

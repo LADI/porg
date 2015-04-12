@@ -20,7 +20,6 @@ namespace Porg
 		SORT_BY_NAME,
 		SORT_BY_SIZE,
 		SORT_BY_NFILES,
-		SORT_BY_NFILES_MISS,
 		SORT_BY_DATE
 	} sort_t;
 

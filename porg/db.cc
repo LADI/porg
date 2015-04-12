@@ -33,8 +33,7 @@ DB::DB()
 :
 	vector<Pkg*>(),
 	m_total_size(0),
-	m_total_files(0),
-	m_total_files_miss(0)
+	m_total_files(0)
 { }
 
 
@@ -95,7 +94,6 @@ bool DB::add_pkg(string const& name)
 		push_back(pkg);
 		m_total_size += pkg->size();
 		m_total_files += pkg->nfiles();
-		m_total_files_miss += pkg->nfiles_miss();
 		return true;
 	}
 	catch (...) 
@@ -108,25 +106,21 @@ bool DB::add_pkg(string const& name)
 //
 // get widths for printing pkg sizes and number of files
 //
-void DB::get_pkg_list_widths(int& size_w, int& nfiles_w, int& nfiles_miss_w)
+void DB::get_pkg_list_widths(int& size_w, int& nfiles_w)
 {
 	size_w = Opt::print_totals() ? get_width(m_total_size) : 0;
 	
 	ulong max_nfiles(Opt::print_totals() ? m_total_files : 0);
-	ulong max_nfiles_miss(Opt::print_totals() ? m_total_files_miss : 0);
 	
 	for (iterator p(begin()); p != end(); ++p) {
 		
 		size_w = max(size_w, get_width((*p)->size()));
 		
-		if (!Opt::print_totals()) {
+		if (!Opt::print_totals())
 			max_nfiles = max(max_nfiles, (*p)->nfiles());
-			max_nfiles_miss = max(max_nfiles_miss, (*p)->nfiles_miss());
-		}
 	}
 
 	nfiles_w = get_digits(max_nfiles);
-	nfiles_miss_w = get_digits(max_nfiles_miss);
 }
 
 
@@ -238,11 +232,11 @@ void DB::del_pkg(string const& name)
 void DB::list()
 {
 	//XXX class members 
-	int size_w = 0, nfiles_w = 0, nfiles_miss_w = 0;
+	int size_w = 0, nfiles_w = 0;
 
-	if (Opt::print_sizes() || Opt::print_nfiles() || Opt::print_nfiles_miss()) {
+	if (Opt::print_sizes() || Opt::print_nfiles()) {
 		// get widths for printing pkg sizes and number of files
-		get_pkg_list_widths(size_w, nfiles_w, nfiles_miss_w);
+		get_pkg_list_widths(size_w, nfiles_w);
 	}
 
 	// sort list of packages
@@ -254,7 +248,7 @@ void DB::list()
 	// list packages
 	
 	for (iterator p(begin()); p != end(); ++p)
-		(*p)->list(size_w, nfiles_w, nfiles_miss_w);
+		(*p)->list(size_w, nfiles_w);
 
 	// print totals, if needed
 	
@@ -265,9 +259,6 @@ void DB::list()
 		
 		if (Opt::print_nfiles())
 			cout << setw(nfiles_w) << m_total_files << "  ";
-
-		if (Opt::print_nfiles_miss())
-			cout << "(" << setw(nfiles_miss_w) << m_total_files_miss << ")  ";
 
 		if (Opt::print_date())
 			cout << fmt_date(0, Opt::print_hour()) << "  ";
@@ -302,11 +293,10 @@ DB::Sorter::Sorter(sort_t const& t /* = SORT_BY_NAME */)
 	m_sort_func()
 {
 	switch (t) {
-		case SORT_BY_SIZE: 			m_sort_func = &Sorter::sort_by_size; break;
-		case SORT_BY_NFILES:		m_sort_func = &Sorter::sort_by_nfiles; break;
-		case SORT_BY_NFILES_MISS:	m_sort_func = &Sorter::sort_by_nfiles_miss; break;
-		case SORT_BY_DATE: 			m_sort_func = &Sorter::sort_by_date; break;
-		default: 					m_sort_func = &Sorter::sort_by_name;
+		case SORT_BY_SIZE: 		m_sort_func = &Sorter::sort_by_size; break;
+		case SORT_BY_NFILES:	m_sort_func = &Sorter::sort_by_nfiles; break;
+		case SORT_BY_DATE: 		m_sort_func = &Sorter::sort_by_date; break;
+		default: 				m_sort_func = &Sorter::sort_by_name;
 	}
 }
 
@@ -329,11 +319,6 @@ bool DB::Sorter::sort_by_size(Pkg* left, Pkg* right) const
 bool DB::Sorter::sort_by_nfiles(Pkg* left, Pkg* right) const
 {
 	return left->nfiles() < right->nfiles();
-}
-
-bool DB::Sorter::sort_by_nfiles_miss(Pkg* left, Pkg* right) const
-{
-	return left->nfiles_miss() < right->nfiles_miss();
 }
 
 bool DB::Sorter::sort_by_date(Pkg* left, Pkg* right) const

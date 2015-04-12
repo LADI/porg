@@ -10,7 +10,6 @@
 me=$(basename $0)
 
 sed_cmd=@SED@
-porg_version=@PACKAGE_VERSION@
 
 die()	{ echo "$me: $*"; exit 1; }
 sayf()	{ [ "$opt_verb" ] && printf "$*"; }
@@ -42,6 +41,10 @@ EOF
 	exit 0
 }
 
+# Get version of porg
+
+porg_version=$(porg --version | grep --only-matching '^porg[^ ]*') || exit 1
+
 # Default log directories
 
 for p in paco porg; do
@@ -61,7 +64,7 @@ while [ "$1" ]; do
 	case $1 in
 		-v|--verbose) 	opt_verb=-v;;
 		-f|--force)		opt_force=-f;;
-		-V|--version)	echo "$me-$porg_version"; exit 0;;
+		-V|--version)	porg --version | sed "s/^porg/$me/"; exit 0;;
 		--paco-logdir=*)
 			paco_dir=${1#*=}
 			[ "$paco_dir" ] || die "Option '${1%=*}' requires an argument"
@@ -118,6 +121,10 @@ for paco_log in $(find $paco_dir -maxdepth 1 -type f); do
 	
 	$sed_cmd -n 's/^#d:/#t:/p' $paco_log >> $porg_log
 
+	line=$($sed_cmd -n '/^##:/ s///p' $paco_log)
+	echo "#s:$(($(echo $line | cut -s -f 1-2 -d '|' --output-delimiter=+)))" >> $porg_log
+	echo "#f:$(($(echo $line | cut -s -f 3-4 -d '|' --output-delimiter=+)))" >> $porg_log
+	
 	echo "#a:$($sed_cmd -n '/^#:Author: */  s///p' $paco_log)" >> $porg_log
 	echo "#S:$($sed_cmd -n '/^#:Summary: */ s///p' $paco_log)" >> $porg_log
 	echo "#u:$($sed_cmd -n '/^#:URL: */     s///p' $paco_log)" >> $porg_log
@@ -136,18 +143,34 @@ for paco_log in $(find $paco_dir -maxdepth 1 -type f); do
 	for buf in $($sed_cmd -n '/^-\?\// s//\//p' $paco_log); do
 		
 		path=${buf%%|*}
+		size=0
+		symlink=
 
 		size_raw=$(echo $buf | cut -f2 -d '|')
 		size_gz=$(echo $buf | cut -f3 -d '|')
 		size_bz2=$(echo $buf | cut -f4 -d '|')
 
-		if [ "$size_raw" -ne 0 ]; then
-			echo $path >> $porg_log
-		elif [ "$size_gz" -ne 0 ]; then
-			echo ${path}.gz >> $porg_log
-		elif [ "$size_bz2" -ne 0 ]; then
-			echo ${path}.bz2 >> $porg_log
+		if [ "$size_raw" -ge 0 ]; then
+			size=$size_raw
+		elif [ "$size_raw" = -1 ]; then
+			symlink=$(readlink $path)
+		elif [ "$size_gz" -ge 0 ]; then
+			path=${path}.gz
+			size=$size_gz
+		elif [ "$size_gz" = -1 ]; then
+			path=${path}.gz
+			symlink=$(readlink $path)
+		elif [ "$size_bz2" -ge 0 ]; then
+			path=${path}.bz2
+			size=$size_bz2
+		elif [ "$size_bz2" = -1 ]; then
+			path=${path}.bz2
+			symlink=$(readlink $path)
 		fi
+
+		[ "$symlink" ] && size=${#symlink}
+		
+		echo "$path|$size|$symlink" >> $porg_log
 
 	done
 	sayf "done\n"

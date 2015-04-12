@@ -77,30 +77,23 @@ Do not print the name of the package when listing. Useful for scripts.
 .SH PACKAGE LIST OPTIONS
 .TP
 \fB-s, --size\fR
-Print the currently installed size of the package. Sizes of hardlinks to installed 
+Print the installed size of the package. Sizes of hardlinks to installed 
 files are counted only once.
 .TP
 \fB-F, --nfiles\fR
-Print the number of currently installed files.
-.TP
-\fB-M, --nfiles-miss\fR
-Print the number of missing files, in parenthesis.
+Print the number of installed files.
 .TP
 \fB-d, --date\fR
 Print the installation date of the package. Double it ('\fB-dd\fR') to print
 also the hour.
 .TP
 \fB-S, --sort\fR=\fIWORD\fR
-Sort the list by WORD: 'name', 'size', 'files', 'files-miss' or 'date'.
+Sort the list by WORD: 'name', 'size', 'files' or 'date'.
 
 .SH FILE LIST OPTIONS
 .TP
 \fB-f, --files\fR
-List the files currently installed by the package.
-.TP
-\fB-m, --files-miss\fR
-List the missing files of the package (original - current). Use along with \fB-f\fR
-to list all files (installed and missing).
+List the files installed by the package.
 .TP
 \fB-s, --size\fR
 Print the size of each file.

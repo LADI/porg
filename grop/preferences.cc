@@ -36,7 +36,7 @@ Preferences::Preferences(Gtk::Window& parent)
 
 	Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
 	
-	string col_names[] = { "_Name", "_Size", "_Files", "Files _miss.", "_Date", "S_ummary" };
+	string col_names[] = { "_Name", "_Size", "_Files", "_Date", "S_ummary" };
 
 	for (int i = 0; i < MainTreeView::NCOLS; ++i) {
 		m_buttons[i].set_label(col_names[i]);
