@@ -10,7 +10,6 @@
 #include "basepkg.h"
 #include "baseopt.h"
 #include "file.h"
-#include "rexp.h"
 #include <fstream>
 #include <algorithm>
 #include <sstream>
@@ -89,20 +88,27 @@ void BasePkg::read_log()
 	if (!(getline(f, buf) && buf.find("#!porg") == 0))
 		throw Error(m_log + ": '#!porg' header missing");
 
-	Rexp re("^(/.+)\\|([0-9]+)\\|(.*)$");
+	char path[4096], link_path[4096];
+	ulong size;
 
 	while (getline(f, buf)) {
 
-		if (buf[0] == '#')
-			read_info_line(buf);
-		
-		else if (re.exec(buf)) {
-			m_files.push_back(new File(re.match(1),	
-				str2num<ulong>(re.match(2)), re.match(3)));
-		}
-		else {
-			assert(re.exec(buf));
-			continue;
+		switch (sscanf(buf.c_str(), "%[^|]|%lu|%s", path, &size, link_path)) {
+
+			case 1:
+				assert(buf[0]=='#');
+				read_info_line(buf);
+				break;
+			
+			case 2: 
+				m_files.push_back(new File(path, size)); 
+				break;
+			
+			case 3: 
+				m_files.push_back(new File(path, size, link_path)); 
+				break;
+			
+			default: assert(false);
 		}
 	}
 
@@ -253,7 +259,7 @@ string BasePkg::get_version(string const& name)
 
 // convert string to numeric
 template <typename T>	// T = {int,long,unsigned,...}
-T str2num(std::string const& s)
+T str2num(string const& s)
 {
 	static std::istringstream is(s);
 	is.clear();
