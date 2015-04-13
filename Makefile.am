@@ -42,6 +42,6 @@ svn-ro:
 svn-rw:
 	svn checkout --username=davidrr svn+ssh://davidrr@svn.code.sf.net/p/porg/code/ porg-code
 
-rebuild-README: doc/index.html
+README: doc/index.html
 	html2text $< | $(SED) 's/&ast;/*/g' > README
 
