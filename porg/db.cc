@@ -229,7 +229,7 @@ void DB::del_pkg(string const& name)
 }
 
 
-void DB::list()
+void DB::list_pkgs()
 {
 	//XXX class members 
 	int size_w = 0, nfiles_w = 0;

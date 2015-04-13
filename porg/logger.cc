@@ -107,7 +107,6 @@ void Logger::read_files_from_command()
 	try
 	{
 		exec_command(tmpfile);
-
 		FileStream<ifstream> f(tmpfile);
 		read_files_from_stream(f);
 		unlink(tmpfile);
@@ -143,13 +142,14 @@ void Logger::exec_command(string const& tmpfile) const
 
 		Out::dbg_title("settings");
 #ifdef __APPLE__
-		Out::dbg("DYLD_INSERT_LIBRARIES: " + libporg);
+		Out::dbg("DYLD_INSERT_LIBRARIES = " + libporg);
+		Out::dbg("DYLD_FORCE_FLAT_NAMESPACE = 1");
 #else
-		Out::dbg("LD_PRELOAD: " + libporg); 
+		Out::dbg("LD_PRELOAD = " + libporg); 
 #endif
-		Out::dbg("INCLUDE:    " + Opt::include()); 
-		Out::dbg("EXCLUDE:    " + Opt::exclude()); 
-		Out::dbg("command:    " + command);
+		Out::dbg("INCLUDE = " + Opt::include()); 
+		Out::dbg("EXCLUDE = " + Opt::exclude()); 
+		Out::dbg("command = " + command);
 		Out::dbg_title("libporg-log");
 
 		char* cmd[] = { (char*)"sh", (char*)"-c", (char*)(command.c_str()), 0 };
@@ -186,7 +186,7 @@ void Logger::filter_files()
 			continue;
 	
 		// skip missing files, if needed
-		else if (lstat(path.c_str(), &s) && !Opt::log_missing())
+		else if (lstat(path.c_str(), &s) < 0 && !Opt::log_missing())
 			continue;
 
 		// log only regular files or symlinks

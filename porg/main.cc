@@ -47,11 +47,11 @@ int main(int argc, char* argv[])
 		switch (Opt::mode()) {
 			case MODE_CONF_OPTS:	db.print_conf_opts();	break;
 			case MODE_INFO:			db.print_info();		break;
-			case MODE_LIST_PKGS:	db.list();				break;
+			case MODE_LIST_PKGS:	db.list_pkgs();			break;
 			case MODE_LIST_FILES:	db.list_files();		break;
 			case MODE_REMOVE:		db.remove();			break;
 			case MODE_QUERY:		db.query();				break;
-			default: 				assert(0);
+			default: 				assert(0);				break;
 		}
 	}
 

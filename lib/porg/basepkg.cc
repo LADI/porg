@@ -51,10 +51,7 @@ BasePkg::BasePkg(string const& name_)
 //
 void BasePkg::read_info_line(string const& buf)
 {
-	if (buf.size() < 3) {
-		assert(buf.size() > 2);
-		return;
-	}
+	assert(buf.size() > 2 && buf[0] == '#' && buf[2] == ':');
 
 	string val(buf.substr(3));
 
@@ -75,7 +72,7 @@ void BasePkg::read_info_line(string const& buf)
 			m_description += val;
 			break;
 		
-		default: assert(false);
+		default: assert(false); break;
 	}
 }
 	
@@ -95,20 +92,21 @@ void BasePkg::read_log()
 
 		switch (sscanf(buf.c_str(), "%[^|]|%lu|%s", path, &size, link_path)) {
 
-			case 1:
-				assert(buf[0]=='#');
+			case 1:	// info header
 				read_info_line(buf);
 				break;
 			
-			case 2: 
+			case 2: // regular file
 				m_files.push_back(new File(path, size)); 
 				break;
 			
-			case 3: 
+			case 3: // symlink
 				m_files.push_back(new File(path, size, link_path)); 
 				break;
 			
-			default: assert(false);
+			default: // parse error
+				assert(false);
+				break;
 		}
 	}
 
@@ -210,7 +208,7 @@ void BasePkg::log_file(string const& path)
 
 bool BasePkg::find_file(File* file)
 {
-	assert(file != 0);
+	assert(file != NULL);
 
 	if (!m_sorted_by_name)
 		sort_files();
@@ -230,6 +228,7 @@ void BasePkg::sort_files(	sort_t type,	// = SORT_BY_NAME
 							bool reverse)	// = false
 {
 	std::sort(m_files.begin(), m_files.end(), Sorter(type));
+	
 	if (reverse)
 		std::reverse(m_files.begin(), m_files.end());
 	

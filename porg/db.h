@@ -28,7 +28,7 @@ class DB : public std::vector<Pkg*>
 	void get_pkgs(std::vector<std::string> const& args);
 	void get_all_pkgs();
 
-	void list();
+	void list_pkgs();
 	void list_files();
 	void print_conf_opts() const;
 	void query();
