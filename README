@@ -30,8 +30,8 @@ list the files installed by the package:
 
     $ porg -f foo-1.3
 
-Porg also provides options for listing packages, sizes, file counts, missing
-files, removing packages or printing package information.
+Porg also provides options for listing packages, sizes, file counts, removing
+packages or printing package information.
 
 
 * Changes from the last version of paco *
