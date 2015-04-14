@@ -67,8 +67,10 @@ logdir = \
 
 install-data-local: porgrc
 	rc_dir="$(DESTDIR)$(sysconfdir)"; \
+	rc_file="$$rc_dir/porgrc"; \
 	( test -d $$rc_dir || $(mkinstalldirs) $$rc_dir ); \
-	( test -f $$rc_dir/porgrc || $(INSTALL_DATA) porgrc $$rc_dir/porgrc )
+	( test -f $$rc_file || $(INSTALL_DATA) porgrc $$rc_file ); \
+	touch $$rc_file
 
 logme:
 	ls $(logme_files) | porg -lp+ porg-$(PACKAGE_VERSION) && \
