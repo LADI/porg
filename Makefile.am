@@ -26,11 +26,16 @@ install-exec-local:
 logme_files = \
 	$(DESTDIR)$(pkgdatadir)/README
 
-## A rule to log the own porg's installation
 logme:
+	@echo "'make logme' is no longer required to log the own porg installation."
+	@echo "Try 'porg -lp porg-$(PACKAGE_VERSION) make install' instead."
+	@echo "If it fails, try 'make logme-really' and report it, please."
+
+## A rule to log the own porg's installation
+logme-really:
 	ls $(logme_files) | porg -lp porg-$(PACKAGE_VERSION) && \
 	for dir in $(SUBDIRS); do \
-	  ( cd $$dir && $(MAKE) $@ ) 2>/dev/null; \
+	  ( cd $$dir && $(MAKE) logme ) 2>/dev/null; \
 	done && \
 	echo && porg -vvxfsty porg-$(PACKAGE_VERSION)
 

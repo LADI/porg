@@ -1,5 +1,15 @@
+SVN
+---
+
+	General changes:
+
+	+ Removed 'make logme' (no longer required to log the own porg 
+	  installation). Experimental. Please report any error.
+
+
 Version 0.8 (13 April 2015)
 ---------------------------
+
 	General changes:
 
 	+ Fixed "double DESTDIR" bug (thanks Rene J.V. Bertin).
