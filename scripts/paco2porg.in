@@ -89,18 +89,15 @@ done
 
 sayf "Importing logs from '$paco_dir' to '$porg_dir'\n"
 
-for paco_log in $(find $paco_dir -maxdepth 1 -type f); do
+for paco_log in $(find $paco_dir -maxdepth 1 -type f '!' -name '.*'); do
 
 	pkg=$(basename $paco_log)
-	
-	# skip hidden files
-	[ ${pkg:0:1} = . ] && continue
 	
 	sayf "${pkg}... "
 
 	# check for '#!paco' header
 	if ! (head -1 $paco_log | grep --quiet '^#!paco'); then
-		sayf "paco header missing, skipped\n"
+		sayf "paco header missing, file skipped\n"
 		continue
 	fi
 

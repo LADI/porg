@@ -82,8 +82,6 @@ void Pkg::unlog() const
 
 void Pkg::list(int size_w, int nfiles_w) const
 {
-	assert(size_w > 0 && nfiles_w > 0);
-
 	if (Opt::print_sizes())
 		cout << setw(size_w) << fmt_size(m_size) << "  ";
 

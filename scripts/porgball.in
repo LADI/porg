@@ -11,9 +11,9 @@ me=$(basename $0)
 
 sed_cmd=@SED@
 
-warn()			{ echo "$me: $*" >&2; exit_status=1; }
-die()			{ warn "$*"; exit 1; }
-say()			{ [ "$opt_verb" ] && echo "$*"; }
+warn()	{ echo "$me: $*" >&2; exit_status=1; }
+die()	{ warn "$*"; exit 1; }
+say()	{ [ "$opt_verb" ] && echo "$*"; }
 
 
 do_help()
@@ -74,19 +74,21 @@ do_check_dir()
 
 do_extract()
 {
-	[ -e $1 ] || { warn "$1: No such file"; return; }
+	ball=$1
 
-	if ! echo $1 | egrep --quiet '\.tar\.(gz|bz2|xz)$'; then
-		warn "$1: Does not look like a porgball; skipped"
+	[ -e $ball ] || { warn "$ball: No such file"; return; }
+
+	if ! echo $ball | egrep --quiet '\.tar\.(gz|bz2|xz)$'; then
+		warn "$ball: Does not look like a porgball; skipped"
 		return
 	fi
 
-	say "Extracting files from $1"
+	say "Extracting files from $ball"
 
-	cmd="tar --directory=$destdir $opt_verb --auto-compress --extract --file=$1"
+	cmd="tar --directory=$destdir $opt_verb --auto-compress --extract --file=$ball"
 
 	if [ "$opt_log" ]; then
-		pkg=${1%.tar.*}
+		pkg=${ball%.tar.*}
 		pkg=${pkg%.porg}
 		pkg=${pkg##*/}
 		porg $opt_logdir $opt_verb --log --package="$pkg" -- $cmd
@@ -102,17 +104,20 @@ do_extract()
 
 do_create()
 {
-	say "Processing $1"
+	pkg=$1
+	say "Processing $pkg"
 
 	# Write list of files logged by the package into tmpfile.
-	# By using ls, only existing files are written,
 	
-	ls -d $(porg $opt_logdir --no-package-name --files $1) 2>/dev/null > $tmpfile
+	> $tmpfile
+	for file in $(porg $opt_logdir --no-package-name --files $pkg); do
+		[ -e $file ] && echo $file >> $tmpfile
+	done
 	[ -s $tmpfile ] || { warn "No files to process"; return; }
 
 	# Get names of tar file and porgball
 
-	tarfile=$(echo $destdir/${1}${porg_suffix}.tar | tr -s /)
+	tarfile=$(echo $destdir/${pkg}${porg_suffix}.tar | tr -s /)
 	case $opt_prog in
 		bzip2)	suf=bz2;;
 		xz)		suf=xz;;
