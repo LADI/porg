@@ -21,8 +21,7 @@ File::File(string const& name_)
 	m_name(name_),
 	m_size(0),
 	m_inode(0),
-	m_ln_name(),
-	m_status(STATUS_UNKNOWN)
+	m_ln_name()
 {
 	struct stat s;
 
@@ -51,20 +50,13 @@ File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
 	m_name(name_),
 	m_size(size_),
 	m_inode(0),
-	m_ln_name(ln_name_),
-	m_status(STATUS_UNKNOWN)
+	m_ln_name(ln_name_)
 { }
 
 
-bool File::is_missing()
+bool File::is_missing() const
 {
-	static struct stat s;
-
-	if (m_status == STATUS_UNKNOWN) {
-		m_status = lstat(m_name.c_str(), &s) == 0 ?
-			STATUS_INSTALLED : STATUS_MISSING;
-	}
-
-	return m_status == STATUS_MISSING;
+	struct stat s;
+	return lstat(m_name.c_str(), &s);
 }
 

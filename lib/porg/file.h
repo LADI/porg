@@ -17,10 +17,6 @@ namespace Porg {
 
 class File
 {
-	static int const STATUS_UNKNOWN 	= 0;
-	static int const STATUS_INSTALLED 	= 1;
-	static int const STATUS_MISSING 	= 2;
-
 	public:
 
 	File(std::string const& name_);
@@ -31,8 +27,7 @@ class File
 	std::string const& ln_name() const	{ return m_ln_name; }
 	ino_t inode() const					{ return m_inode; }
 	bool is_symlink() const				{ return !m_ln_name.empty(); }
-	
-	bool is_missing();
+	bool is_missing() const;
 
 	private:
 
@@ -45,8 +40,6 @@ class File
 	// if the file is a symlink, name of the file it refers to,
 	// or an empty string otherwise
 	std::string m_ln_name;	
-
-	int m_status;
 
 };	// class File
 
