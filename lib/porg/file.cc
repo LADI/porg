@@ -10,17 +10,19 @@
 #include "file.h"
 
 using std::string;
+using namespace Porg;
 
 
 //
 // Ctor. for newly logged files
 //
-Porg::File::File(string const& name_)
+File::File(string const& name_)
 :
 	m_name(name_),
 	m_size(0),
 	m_inode(0),
-	m_ln_name()
+	m_ln_name(),
+	m_status(STATUS_UNKNOWN)
 {
 	struct stat s;
 
@@ -44,11 +46,25 @@ Porg::File::File(string const& name_)
 //
 // Ctor. for files read from database
 //
-Porg::File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
+File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
 :
 	m_name(name_),
 	m_size(size_),
 	m_inode(0),
-	m_ln_name(ln_name_)
+	m_ln_name(ln_name_),
+	m_status(STATUS_UNKNOWN)
 { }
+
+
+bool File::is_missing()
+{
+	static struct stat s;
+
+	if (m_status == STATUS_UNKNOWN) {
+		m_status = lstat(m_name.c_str(), &s) == 0 ?
+			STATUS_INSTALLED : STATUS_MISSING;
+	}
+
+	return m_status == STATUS_MISSING;
+}
 
