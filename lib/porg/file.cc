@@ -10,12 +10,13 @@
 #include "file.h"
 
 using std::string;
+using namespace Porg;
 
 
 //
 // Ctor. for newly logged files
 //
-Porg::File::File(string const& name_)
+File::File(string const& name_)
 :
 	m_name(name_),
 	m_size(0),
@@ -44,11 +45,18 @@ Porg::File::File(string const& name_)
 //
 // Ctor. for files read from database
 //
-Porg::File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
+File::File(string const& name_, ulong size_, string const& ln_name_ /* = "" */)
 :
 	m_name(name_),
 	m_size(size_),
 	m_inode(0),
 	m_ln_name(ln_name_)
 { }
+
+
+bool File::is_missing() const
+{
+	struct stat s;
+	return lstat(m_name.c_str(), &s);
+}
 

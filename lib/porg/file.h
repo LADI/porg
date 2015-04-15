@@ -27,6 +27,7 @@ class File
 	std::string const& ln_name() const	{ return m_ln_name; }
 	ino_t inode() const					{ return m_inode; }
 	bool is_symlink() const				{ return !m_ln_name.empty(); }
+	bool is_missing() const;
 
 	private:
 

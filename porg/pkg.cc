@@ -108,7 +108,7 @@ void Pkg::list_files(int size_w)
 		cout << m_name << ":\n";
 
 	for (const_iter f(m_files.begin()); f != m_files.end(); ++f) {
-		
+
 		if (Opt::print_sizes())
 			cout << setw(size_w) << fmt_size((*f)->size()) << "  ";
 
