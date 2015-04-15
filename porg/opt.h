@@ -19,6 +19,7 @@ namespace Porg {
 
 
 enum {
+	MODE_DEFAULT	= 1 << 0,	// alias for MODE_LIST_PKGS
    	MODE_LIST_PKGS	= 1 << 0,
    	MODE_LIST_FILES = 1 << 1,
    	MODE_QUERY 		= 1 << 2,
@@ -26,6 +27,10 @@ enum {
    	MODE_CONF_OPTS 	= 1 << 4,
    	MODE_LOG 		= 1 << 5,
    	MODE_REMOVE 	= 1 << 6
+};
+
+enum {
+	MODES_LIST	= MODE_LIST_PKGS | MODE_LIST_FILES
 };
 
 
@@ -41,7 +46,6 @@ class Opt : public BaseOpt
 	static bool exact_version()		{ return s_exact_version; }
 	static bool print_sizes()		{ return s_print_sizes; }
 	static bool print_nfiles()		{ return s_print_nfiles; }
-	static bool list_files()		{ return s_list_files; }
 	static bool print_totals()		{ return s_print_totals; }
 	static bool print_symlinks()	{ return s_print_symlinks; }
 	static bool print_no_pkg_name()	{ return s_print_no_pkg_name; }
@@ -70,7 +74,6 @@ class Opt : public BaseOpt
 	static bool s_exact_version;
 	static bool s_print_sizes;
 	static bool s_print_nfiles;
-	static bool s_list_files;
 	static bool s_print_totals;
 	static bool s_print_symlinks;
 	static bool s_print_no_pkg_name;
