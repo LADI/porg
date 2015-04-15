@@ -15,10 +15,7 @@
 using namespace Porg;
 
 // Initialization of global vars
-namespace Porg
-{
-	int g_exit_status = EXIT_SUCCESS;
-}
+int Porg::g_exit_status = EXIT_SUCCESS;
 
 
 int main(int argc, char* argv[])

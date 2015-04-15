@@ -24,31 +24,28 @@ static void die_help(string const& msg = "");
 static string to_lower(string const& str);
 
 
-namespace Porg
-{
-	bool Opt::s_all_pkgs = false;
-	bool Opt::s_exact_version = false;
-	bool Opt::s_print_sizes = false;
-	bool Opt::s_print_nfiles = false;
-	bool Opt::s_list_files = false;
-	bool Opt::s_print_totals = false;
-	bool Opt::s_print_symlinks = false;
-	bool Opt::s_print_no_pkg_name = false;
-	bool Opt::s_remove_batch = false;
-	bool Opt::s_remove_unlog = false;
-	bool Opt::s_log_append = false;
-	bool Opt::s_log_missing = false;
-	bool Opt::s_reverse_sort = false;
-	bool Opt::s_print_date = false;
-	bool Opt::s_print_hour = false;
-	bool Opt::s_logdir_created = false;
-	sort_t Opt::s_sort_type = SORT_BY_NAME;
-	string Opt::s_log_pkg_name = "";
-	int Opt::s_mode = MODE_LIST_PKGS;
-	vector<string> Opt::s_args = vector<string>();
-	char Opt::s_mode_char = 0;
-	string Opt::s_optchars = "";
-}
+bool Opt::s_all_pkgs = false;
+bool Opt::s_exact_version = false;
+bool Opt::s_print_sizes = false;
+bool Opt::s_print_nfiles = false;
+bool Opt::s_list_files = false;
+bool Opt::s_print_totals = false;
+bool Opt::s_print_symlinks = false;
+bool Opt::s_print_no_pkg_name = false;
+bool Opt::s_remove_batch = false;
+bool Opt::s_remove_unlog = false;
+bool Opt::s_log_append = false;
+bool Opt::s_log_missing = false;
+bool Opt::s_reverse_sort = false;
+bool Opt::s_print_date = false;
+bool Opt::s_print_hour = false;
+bool Opt::s_logdir_created = false;
+sort_t Opt::s_sort_type = SORT_BY_NAME;
+string Opt::s_log_pkg_name = "";
+int Opt::s_mode = MODE_LIST_PKGS;
+vector<string> Opt::s_args = vector<string>();
+char Opt::s_mode_char = 0;
+string Opt::s_optchars = "";
 
 
 void Opt::init(int argc, char* argv[])
