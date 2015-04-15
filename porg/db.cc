@@ -129,11 +129,8 @@ void DB::get_pkg_list_widths(int& size_w, int& nfiles_w)
 //
 int DB::get_file_size_width()
 {
-	int size_w = 0;
-	
-	if (Opt::print_totals() && Opt::list_files())
-		size_w = get_width(m_total_size);
-	
+	int size_w = Opt::print_totals() ? get_width(m_total_size) : 0;
+
 	for (iterator p(begin()); p != end(); ++p) {
 		for (Pkg::const_iter f((*p)->files().begin()); f != (*p)->files().end(); ++f)
 			size_w = max(size_w, get_width((*f)->size()));
@@ -146,9 +143,12 @@ int DB::get_file_size_width()
 void DB::print_conf_opts() const
 {
 	for (const_iterator p(begin()); p != end(); ++p) {
+		
 		if (size() > 1)
 			cout << (*p)->name() << ":\n";
+		
 		cout << (*p)->conf_opts() << '\n';
+		
 		if (!(*p)->conf_opts().empty() && size() > 1 && p != end() - 1)
 			cout << '\n';
 	}
@@ -164,6 +164,7 @@ void DB::query()
 		cout << path << ':';
 		
 		for (const_iterator p(begin()); p != end(); ++p) {
+			
 			if ((*p)->find_file(path)) {
 				found = true;
 				cout << "  " << (*p)->name();
@@ -193,9 +194,9 @@ void DB::remove()
 			 << (Opt::remove_unlog() ? "unlogged" : "removed") << ":\n";
 		
 		for (iterator p(begin()); p != end(); ++p)
-			cout << "  " << (*p)->name();
+			cout << "    " << (*p)->name() << '\n';
 		
-		cout << "\nDo you want to proceed (y/N) ? ";
+		cout << "Do you want to proceed (y/N) ? ";
 		
 		string buf;
 		if (getline(std::cin, buf) && buf != "y")
@@ -231,7 +232,6 @@ void DB::del_pkg(string const& name)
 
 void DB::list_pkgs()
 {
-	//XXX class members 
 	int size_w = 0, nfiles_w = 0;
 
 	if (Opt::print_sizes() || Opt::print_nfiles()) {
