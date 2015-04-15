@@ -28,7 +28,6 @@ bool Opt::s_all_pkgs = false;
 bool Opt::s_exact_version = false;
 bool Opt::s_print_sizes = false;
 bool Opt::s_print_nfiles = false;
-bool Opt::s_list_files = false;
 bool Opt::s_print_totals = false;
 bool Opt::s_print_symlinks = false;
 bool Opt::s_print_no_pkg_name = false;
@@ -227,10 +226,6 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_SIZE:
 				check_mode(MODE_LIST_FILES | MODE_LIST_PKGS, c);
 				s_print_sizes = true;
-				break;
-
-			case OPT_FILES:
-				s_list_files = true;
 				break;
 
 			case OPT_DATE:
