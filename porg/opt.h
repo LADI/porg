@@ -29,10 +29,6 @@ enum {
    	MODE_REMOVE 	= 1 << 6
 };
 
-enum {
-	MODES_LIST	= MODE_LIST_PKGS | MODE_LIST_FILES
-};
-
 
 class Opt : public BaseOpt
 {

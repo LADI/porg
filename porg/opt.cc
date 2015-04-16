@@ -223,7 +223,8 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_EXACT_VERSION:
 				check_mode(MODE_REMOVE, c);
 			case OPT_ALL:
-				check_mode(MODES_LIST | MODE_INFO | MODE_CONF_OPTS, c);
+				check_mode(MODE_LIST_PKGS | MODE_LIST_FILES | MODE_INFO 
+					| MODE_CONF_OPTS, c);
 				break;
 
 			case OPT_SORT:
@@ -231,7 +232,7 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_TOTAL:
 			case OPT_NO_PACKAGE_NAME:
 			case OPT_SIZE:
-				check_mode(MODES_LIST, c);
+				check_mode(MODE_LIST_PKGS | MODE_LIST_FILES, c);
 				break;
 
 			case OPT_DATE:
@@ -357,20 +358,14 @@ void Opt::check_mode(int modes, char optchar)
 //
 void Opt::check_required(char optchar, string const& required)
 {
-	assert(!required.empty());
-
 	if (s_optchars.find_first_of(required) == string::npos) {
 		
-		string err = string("Option -") + optchar + " requires ";
+		string err = string("Option -") + optchar + " requires";
 		
-		if (required.size() > 1) {
-			err += string("at least one of -");
-			for (uint i = 0; i < required.size(); err += required[i++]) ;
-		}
-		else
-			err += string("-") + required;
+		if (required.size() > 1)
+			err += " at least one of";
 
-		die_help(err);
+		die_help(err + " -" + required);
 	}
 }
 
