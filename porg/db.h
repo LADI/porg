@@ -26,19 +26,20 @@ class DB : public std::vector<Pkg*>
 	~DB();
 
 	void get_pkgs(std::vector<std::string> const& args);
-	void get_all_pkgs();
+	void get_pkgs_all();
+	void sort_pkgs(sort_t type = SORT_BY_NAME, bool reverse = false);
 
-	void list_pkgs();
-	void list_files();
+	void list_pkgs() const;
+	void list_files() const;
 	void print_conf_opts() const;
-	void query();
-	void remove();
+	void query() const;
+	void remove() const;
 	void print_info() const;
 
 	protected:
 
-	void get_pkg_list_widths(int&, int&);
-	int get_file_size_width();
+	void get_pkg_list_widths(int&, int&) const;
+	int get_file_size_width() const;
 	bool add_pkg(std::string const& name);
 	void del_pkg(std::string const& name);
 

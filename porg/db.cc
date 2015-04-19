@@ -47,13 +47,11 @@ DB::~DB()
 //
 // get all packages logged in database
 //
-void DB::get_all_pkgs()
+void DB::get_pkgs_all()
 {
 	Dir dir(Opt::logdir());
 
 	for (string name; dir.read(name); add_pkg(name)) ;
-
-	std::sort(begin(), end(), Sorter());
 
 	if (empty())
 		Out::vrb("porg: No packages logged in '" + Opt::logdir() + "'");
@@ -82,8 +80,6 @@ void DB::get_pkgs(vector<string> const& args)
 			g_exit_status = EXIT_FAILURE;
 		}
 	}
-
-	std::sort(begin(), end(), Sorter());
 }
 
 
@@ -107,13 +103,13 @@ bool DB::add_pkg(string const& name)
 //
 // get widths for printing pkg sizes and number of files
 //
-void DB::get_pkg_list_widths(int& size_w, int& nfiles_w)
+void DB::get_pkg_list_widths(int& size_w, int& nfiles_w) const
 {
 	size_w = Opt::print_totals() ? get_width(m_total_size) : 0;
 	
 	ulong max_nfiles(Opt::print_totals() ? m_total_files : 0);
 	
-	for (iterator p(begin()); p != end(); ++p) {
+	for (const_iterator p(begin()); p != end(); ++p) {
 		
 		size_w = max(size_w, get_width((*p)->size()));
 		
@@ -128,11 +124,11 @@ void DB::get_pkg_list_widths(int& size_w, int& nfiles_w)
 //
 // get width for printing file sizes
 //
-int DB::get_file_size_width()
+int DB::get_file_size_width() const
 {
 	int size_w = Opt::print_totals() ? get_width(m_total_size) : 0;
 
-	for (iterator p(begin()); p != end(); ++p) {
+	for (const_iterator p(begin()); p != end(); ++p) {
 		for (Pkg::const_iter f((*p)->files().begin()); f != (*p)->files().end(); ++f)
 			size_w = max(size_w, get_width((*f)->size()));
 	}
@@ -156,7 +152,7 @@ void DB::print_conf_opts() const
 }
 
 
-void DB::query()
+void DB::query() const
 {
 	for (uint i(0); i < Opt::args().size(); ++i) {
 		
@@ -186,7 +182,17 @@ void DB::print_info() const
 }
 
 
-void DB::remove()
+void DB::sort_pkgs(	sort_t type,	// = SORT_BY_NAME
+					bool reverse)	// = false
+{
+	std::sort(begin(), end(), Sorter(type));
+
+	if (reverse)
+		std::reverse(begin(), end());
+}
+
+
+void DB::remove() const
 {
 	// ask the user, if needed
 	if (!Opt::remove_batch()) {
@@ -194,7 +200,7 @@ void DB::remove()
 		cout << "The following packages will be "
 			 << (Opt::remove_unlog() ? "unlogged:" : "removed:") << endl;
 		
-		for (iterator p(begin()); p != end(); ++p)
+		for (const_iterator p(begin()); p != end(); ++p)
 			cout << "    " << (*p)->name() << endl;
 		
 		cout << "Do you want to proceed (y/N) ? ";
@@ -205,15 +211,15 @@ void DB::remove()
 	}
 
 	if (Opt::remove_unlog()) {
-		for (iterator p(begin()); p != end(); (*p++)->unlog()) ;
+		for (const_iterator p(begin()); p != end(); (*p++)->unlog()) ;
 		return;
 	}
 	
 	// auxiliary DB to check for shared files
 	DB aux;
-	aux.get_all_pkgs();
+	aux.get_pkgs_all();
 
-	for (iterator p(begin()); p != end(); ++p) {
+	for (const_iterator p(begin()); p != end(); ++p) {
 		(*p)->remove(aux);
 		aux.del_pkg((*p)->name());
 	}
@@ -231,24 +237,18 @@ void DB::del_pkg(string const& name)
 }
 
 
-void DB::list_pkgs()
+void DB::list_pkgs() const
 {
 	int size_w = 0, nfiles_w = 0;
 
-	if (Opt::print_sizes() || Opt::print_nfiles()) {
-		// get widths for printing pkg sizes and number of files
-		get_pkg_list_widths(size_w, nfiles_w);
-	}
+	// get widths for printing pkg sizes and number of files
 
-	// sort list of packages
-	
-	std::sort(begin(), end(), Sorter(Opt::sort_type()));
-	if (Opt::reverse_sort())
-		std::reverse(begin(), end());
+	if (Opt::print_sizes() || Opt::print_nfiles())
+		get_pkg_list_widths(size_w, nfiles_w);
 
 	// list packages
 	
-	for (iterator p(begin()); p != end(); ++p)
+	for (const_iterator p(begin()); p != end(); ++p)
 		(*p)->list(size_w, nfiles_w);
 
 	// print totals, if needed
@@ -269,11 +269,11 @@ void DB::list_pkgs()
 }
 
 
-void DB::list_files()
+void DB::list_files() const
 {
 	int size_w(get_file_size_width());
 
-	for (iterator p(begin()); p != end(); ++p) {
+	for (const_iterator p(begin()); p != end(); ++p) {
 		(*p)->list_files(size_w);
 		if (!Opt::print_no_pkg_name() && size() > 1)
 			cout << endl;

@@ -34,12 +34,14 @@ int main(int argc, char* argv[])
 		DB db;
 
 		if (Opt::mode() == MODE_QUERY || Opt::all_pkgs())
-			db.get_all_pkgs();
+			db.get_pkgs_all();
 		else
 			db.get_pkgs(Opt::args());
 
 		if (db.empty())
 			exit(g_exit_status);
+
+		db.sort_pkgs(Opt::sort_type(), Opt::reverse_sort());
 
 		switch (Opt::mode()) {
 			case MODE_CONF_OPTS:	db.print_conf_opts();	break;
