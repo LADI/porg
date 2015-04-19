@@ -15,6 +15,7 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::cerr;
+using std::endl;
 using namespace Porg;
 
 static void help();
@@ -456,7 +457,8 @@ cout <<
 "  -I, --include=PATH:...   List of paths to scan.\n"
 "  -E, --exclude=PATH:...   List of paths to skip.\n\n"
 "Note: The package list mode is enabled by default.\n\n"
-"Written by David Ricart <" PACKAGE_BUGREPORT ">\n";
+"Written by David Ricart <" PACKAGE_BUGREPORT ">"
+<< endl;
 
 	exit(EXIT_SUCCESS);
 }
@@ -465,7 +467,7 @@ cout <<
 static void version()
 {
 	cout << "porg-" PACKAGE_VERSION " (" RELEASEDATE ")\n"
-		"Written by David Ricart <" PACKAGE_BUGREPORT ">\n";
+		"Written by David Ricart <" PACKAGE_BUGREPORT ">" << endl;
 
 	exit(EXIT_SUCCESS);
 }

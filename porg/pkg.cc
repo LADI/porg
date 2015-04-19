@@ -19,6 +19,7 @@
 
 using std::string;
 using std::cout;
+using std::endl;
 using std::set;
 using std::setw;
 using namespace Porg;
@@ -37,16 +38,16 @@ Pkg::Pkg(string const& name_)
 void Pkg::print_info() const
 {
 	cout
-		<< string(m_name.size() + 2, '-') << '\n'
-		<< " " << m_name << " \n"
-		<< string(m_name.size() + 2, '-') << '\n'
-		<< "Name:    " << m_base_name << '\n'
-		<< "Version: " << m_version << '\n'
-		<< "Summary: " << m_summary << '\n'
-		<< "Author:  " << m_author << '\n'
-		<< "License: " << m_license << '\n'
-		<< "URL:     " << m_url << "\n\n"
-		<< description_str() << "\n\n";
+		<< string(m_name.size() + 2, '-') << endl
+		<< " " << m_name << " " << endl
+		<< string(m_name.size() + 2, '-') << endl
+		<< "Name:    " << m_base_name << endl
+		<< "Version: " << m_version << endl
+		<< "Summary: " << m_summary << endl
+		<< "Author:  " << m_author << endl
+		<< "License: " << m_license << endl
+		<< "URL:     " << m_url << endl << endl
+		<< description_str() << endl << endl;
 }
 
 
@@ -94,7 +95,7 @@ void Pkg::list(int size_w, int nfiles_w) const
 	if (!Opt::print_no_pkg_name())
 		cout << m_name;
 	
-	cout << '\n';
+	cout << endl;
 }
 
 
@@ -105,7 +106,7 @@ void Pkg::list_files(int size_w)
 	sort_files(Opt::sort_type(), Opt::reverse_sort());
 
 	if (!Opt::print_no_pkg_name())
-		cout << m_name << ":\n";
+		cout << m_name << ":" << endl;
 
 	for (const_iter f(m_files.begin()); f != m_files.end(); ++f) {
 
@@ -117,7 +118,7 @@ void Pkg::list_files(int size_w)
 		if (Opt::print_symlinks() && (*f)->is_symlink())
 			cout << " -> " << (*f)->ln_name();
 
-		cout << '\n';
+		cout << endl;
 	}
 }
 

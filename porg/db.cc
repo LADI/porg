@@ -18,6 +18,7 @@
 #include <iomanip>
 
 using std::cout;
+using std::endl;
 using std::vector;
 using std::setw;
 using std::string;
@@ -145,12 +146,12 @@ void DB::print_conf_opts() const
 	for (const_iterator p(begin()); p != end(); ++p) {
 		
 		if (size() > 1)
-			cout << (*p)->name() << ":\n";
+			cout << (*p)->name() << ":" << endl;
 		
-		cout << (*p)->conf_opts() << '\n';
+		cout << (*p)->conf_opts() << endl;
 		
 		if (!(*p)->conf_opts().empty() && size() > 1 && p != end() - 1)
-			cout << '\n';
+			cout << endl;
 	}
 }
 
@@ -171,7 +172,7 @@ void DB::query()
 			}
 		}
 		
-		cout << '\n';
+		cout << endl;
 
 		if (!found)
 			g_exit_status = EXIT_FAILURE;
@@ -191,10 +192,10 @@ void DB::remove()
 	if (!Opt::remove_batch()) {
 		
 		cout << "The following packages will be "
-			 << (Opt::remove_unlog() ? "unlogged" : "removed") << ":\n";
+			 << (Opt::remove_unlog() ? "unlogged:" : "removed:") << endl;
 		
 		for (iterator p(begin()); p != end(); ++p)
-			cout << "    " << (*p)->name() << '\n';
+			cout << "    " << (*p)->name() << endl;
 		
 		cout << "Do you want to proceed (y/N) ? ";
 		
@@ -263,7 +264,7 @@ void DB::list_pkgs()
 		if (Opt::print_date())
 			cout << fmt_date(0, Opt::print_hour()) << "  ";
 		
-		cout << "TOTAL\n";
+		cout << "TOTAL" << endl;
 	}
 }
 
@@ -275,11 +276,11 @@ void DB::list_files()
 	for (iterator p(begin()); p != end(); ++p) {
 		(*p)->list_files(size_w);
 		if (!Opt::print_no_pkg_name() && size() > 1)
-			cout << '\n';
+			cout << endl;
 	}
 
 	if (Opt::print_totals())
-		cout << setw(size_w) << fmt_size(m_total_size) << "  TOTAL\n";
+		cout << setw(size_w) << fmt_size(m_total_size) << "  TOTAL" << endl;
 }
 
 
