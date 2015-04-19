@@ -221,7 +221,10 @@ Opt::Opt(int argc, char* argv[])
 		switch (c) {
 			
 			case OPT_EXACT_VERSION:
-				check_mode(MODE_REMOVE, c);
+				check_mode(MODE_LIST_PKGS | MODE_LIST_FILES | MODE_INFO 
+					| MODE_CONF_OPTS | MODE_REMOVE, c);
+				break;
+
 			case OPT_ALL:
 				check_mode(MODE_LIST_PKGS | MODE_LIST_FILES | MODE_INFO 
 					| MODE_CONF_OPTS, c);
