@@ -315,8 +315,6 @@ Opt::Opt(int argc, char* argv[])
 
 	// Checkings
 
-	check_logdir();
-
 	switch (s_mode) {
 
 		case MODE_QUERY:

@@ -8,7 +8,6 @@
 
 #include "config.h"
 #include "baseopt.h"
-#include "common.h"		// for Error
 #include "rexp.h"
 #include <wordexp.h>
 #include <fstream>
@@ -50,13 +49,6 @@ BaseOpt::BaseOpt()
    				s_remove_skip = val;
 		}
 	}
-}
-
-
-void BaseOpt::check_logdir()
-{
-	if (in_paths(s_logdir, "/dev:/proc:/sys:/run"))
-		throw Error(s_logdir + ": Invalid log directory");
 }
 
 

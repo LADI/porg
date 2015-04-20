@@ -28,8 +28,6 @@ DB::DB()
 	g_assert(s_initialized == false);
 	g_assert(Opt::initialized());
 
-	Opt::check_logdir();
-
 	Gtk::MessageDialog dialog("Reading database  (" + Opt::logdir() + ")", false, 
 		Gtk::MESSAGE_INFO, Gtk::BUTTONS_NONE, true);
 	dialog.set_title("grop :: info");
