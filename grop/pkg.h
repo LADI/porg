@@ -13,7 +13,6 @@
 
 namespace Grop {
 
-
 typedef Porg::BasePkg Pkg;
 typedef Porg::File File;
 

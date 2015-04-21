@@ -84,7 +84,7 @@ void DB::init()
 
 void DB::remove_pkg(Pkg* pkg)
 {
-	g_assert(pkg != 0);
+	g_assert(pkg != NULL);
 
 	pkg->unlog();
 
