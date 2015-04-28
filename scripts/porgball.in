@@ -171,8 +171,6 @@ done
 def_logdir=${def_logdir:-/var/log/porg}
 logdir=$def_logdir
 
-pkg=${pkg##*/}
-
 
 # Parse the command line
 
