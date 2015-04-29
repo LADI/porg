@@ -68,11 +68,8 @@ Grop::Porgball::Porgball(Pkg const& pkg, Gtk::Window& parent)
 		m_combo_prog.append("xz");
 
 	m_combo_level.append("1 (faster)");
-	char num[2];
-	for (int i = 2; i < 9; ++i) {
-		g_snprintf(num, sizeof(num), "%d", i);
-		m_combo_level.append(num);
-	}
+	for (int i = 2; i < 9; ++i)
+		m_combo_level.append(Porg::num2str(i));
 	m_combo_level.append("9 (better)");
 
 	Gtk::Box* box_vexpand = Gtk::manage(new Gtk::Box());
@@ -115,7 +112,7 @@ Grop::Porgball::Porgball(Pkg const& pkg, Gtk::Window& parent)
 	get_action_area()->set_layout(Gtk::BUTTONBOX_EDGE);
 
 	if (::close(Glib::file_open_tmp(m_tmpfile, "grop")) < 0)
-		m_tmpfile = "/tmp/grop" + getpid();
+		m_tmpfile = "/tmp/grop" + Porg::num2str(getpid());
 
 	m_filechooser_button.set_current_folder(s_last.folder);
 	m_combo_prog.set_active(s_last.prog);

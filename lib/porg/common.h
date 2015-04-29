@@ -12,6 +12,7 @@
 #include "config.h"
 #include <stdexcept>
 #include <iosfwd>
+#include <sstream>
 
 
 namespace Porg
@@ -44,6 +45,29 @@ namespace Porg
 			this->exceptions(std::ios::badbit);
 		}
 	};
+
+
+	// Convert string to numeric
+	template <typename T>	// T = {int,long,unsigned,...}
+	T str2num(std::string const& s)
+	{
+		static std::istringstream is(s);
+		is.clear();
+		is.str(s);
+		T t;
+		is >> t;
+		return t;
+	}
+
+	// Convert numeric to string
+	template <typename T>
+	std::string num2str(T t)
+	{
+		std::ostringstream os("");
+		os << t;
+		return os.str();
+	}
+
 
 	extern std::string fmt_size(ulong size);
 	extern std::string fmt_size(float size);

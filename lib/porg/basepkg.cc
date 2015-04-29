@@ -18,8 +18,6 @@
 using std::string;
 using namespace Porg;
 
-template<typename T> static T str2num(string const&);
-
 
 BasePkg::BasePkg(string const& name_)
 :
@@ -253,19 +251,6 @@ string BasePkg::get_version(string const& name)
 			return name.substr(i);
 	}
 	return "";
-}
-
-
-// convert string to numeric
-template <typename T>	// T = {int,long,unsigned,...}
-T str2num(string const& s)
-{
-	static std::istringstream is(s);
-	is.clear();
-	is.str(s);
-	T t;
-	is >> t;
-	return t;
 }
 
 

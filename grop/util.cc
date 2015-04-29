@@ -12,7 +12,6 @@
 #include <gtkmm/main.h>
 
 using std::string;
-using namespace Grop;
 
 
 void Grop::main_iter()
