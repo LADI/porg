@@ -190,10 +190,12 @@ static void porg_log(const char* path, const char* fmt, ...)
 
 	porg_init();
 
-	va_start(a, fmt);
-	porg_vprintf(fmt, a);
-	va_end(a);
-	
+	if (porg_debug) {
+		va_start(a, fmt);
+		porg_vprintf(fmt, a);
+		va_end(a);
+	}
+
 	/* write path to tmp file to be read by porg */
 
 	if ((fd = libc_open(porg_tmpfile, O_WRONLY | O_CREAT | O_APPEND, 0644)) < 0)
