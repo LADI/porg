@@ -13,7 +13,6 @@ sed_cmd=@SED@
 
 die()	{ echo "$me: $*"; exit 1; }
 sayf()	{ [ "$opt_verb" ] && printf "$*"; }
-dot()	{ sayf .; }
 
 do_help()
 {
@@ -87,7 +86,7 @@ done
 
 # Process the packages
 
-sayf "Importing logs from '$paco_dir' to '$porg_dir'\n"
+sayf "Importing packages from '$paco_dir' to '$porg_dir'\n"
 
 for paco_log in $(find $paco_dir -maxdepth 1 -type f '!' -name '.*'); do
 
@@ -97,7 +96,7 @@ for paco_log in $(find $paco_dir -maxdepth 1 -type f '!' -name '.*'); do
 
 	# check for '#!paco' header
 	if ! (head -1 $paco_log | grep --quiet '^#!paco'); then
-		sayf "paco header missing, file skipped\n"
+		sayf "paco header missing, skipped\n"
 		continue
 	fi
 
