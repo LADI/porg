@@ -11,11 +11,12 @@
 
 using Glib::ustring;
 using namespace Grop;
+using namespace Gtk;
 
 
 InfoTextView::InfoTextView(Pkg const& pkg)
 :
-	Gtk::TextView(),
+	TextView(),
 	m_text_buffer(get_buffer()),
 	m_tag_wrap(m_text_buffer->create_tag()),
 	m_tag_title(m_text_buffer->create_tag())
@@ -25,7 +26,7 @@ InfoTextView::InfoTextView(Pkg const& pkg)
 	set_left_margin(10);
 	set_right_margin(10);
 
-	m_tag_wrap->property_wrap_mode() = Gtk::WRAP_WORD;
+	m_tag_wrap->property_wrap_mode() = WRAP_WORD;
 	m_tag_title->property_weight() = Pango::WEIGHT_BOLD;
 	m_tag_title->property_family() = "monospace";
 

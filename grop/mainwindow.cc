@@ -26,27 +26,28 @@
 
 
 using std::string;
-using Gtk::Action;
+using namespace Gtk;
 using namespace Grop;
 using namespace sigc;
 
 
 MainWindow::MainWindow()
 :
-	Gtk::Window(),
+	Window(),
 	m_treeview(),
 	m_statusbar(),
-	m_uimanager(Gtk::UIManager::create()),
-	m_action_group(Gtk::ActionGroup::create()),
-	m_action_find(Action::create("FindFile", Gtk::Stock::FIND)),
-	m_action_properties(Action::create("Properties", Gtk::Stock::PROPERTIES)),
+	m_uimanager(UIManager::create()),
+	m_action_group(ActionGroup::create()),
+	m_action_find(Action::create("FindFile", Stock::FIND)),
+	m_action_properties(Action::create("Properties", Stock::PROPERTIES)),
 	m_action_porgball(Action::create("Porgball", "Create porgball")),
-	m_action_remove(Action::create("RemovePkg", Gtk::Stock::REMOVE)),
+	m_action_remove(Action::create("RemovePkg", Stock::REMOVE)),
 	m_action_unlog(Action::create("UnlogPkg", "Unlog")),
 	m_popup_menu(0),
 	m_selected_pkg(0)
 {
 	g_assert(Opt::initialized());
+	g_assert(DB::initialized());
 
 	set_default_size(Opt::width(), Opt::height());
 	move(Opt::xpos(), Opt::ypos());
@@ -67,10 +68,10 @@ MainWindow::MainWindow()
 	m_statusbar.set_vexpand(false);
 	update_statusbar();
 
-	Gtk::ScrolledWindow* scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
+	ScrolledWindow* scrolled_window = manage(new ScrolledWindow());
 	scrolled_window->add(m_treeview);
 
-	Gtk::Box* box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+	Box* box = manage(new Box(ORIENTATION_VERTICAL));
 	box->pack_start(*(m_uimanager->get_widget("/MenuBar")), false, true);
 	box->pack_start(*scrolled_window, true, true);
 	box->pack_start(m_statusbar, false, true);
@@ -85,7 +86,7 @@ MainWindow::~MainWindow()
 	// save window geometry
 	int w, h, x, y;
 	get_size(w, h);
-	get_position(x, y);	//XXX does not work WTF :(
+	get_position(x, y);
 	Opt::set_whxy(w, h, x, y);
 }
 
@@ -103,12 +104,12 @@ void MainWindow::update_statusbar()
 void MainWindow::build_menu_bar()
 {
 	m_action_group->add(Action::create("MenuFile", "_File"));
-	m_action_group->add(Action::create("Quit", Gtk::Stock::QUIT), 
+	m_action_group->add(Action::create("Quit", Stock::QUIT), 
 		mem_fun(this, &MainWindow::hide));
 
 	m_action_group->add(Action::create("MenuEdit", "_Edit"));
 	m_action_group->add(m_action_find, mem_fun(this, &MainWindow::on_find_file));
-	m_action_group->add(Action::create("Preferences", Gtk::Stock::PREFERENCES), 
+	m_action_group->add(Action::create("Preferences", Stock::PREFERENCES), 
 		mem_fun(this, &MainWindow::on_preferences));
 
 	m_action_group->add(Action::create("MenuPackage", "_Package"));
@@ -118,7 +119,7 @@ void MainWindow::build_menu_bar()
 	m_action_group->add(m_action_unlog, mem_fun(*this, &MainWindow::on_unlog));
 
 	m_action_group->add(Action::create("MenuHelp", "_Help"));
-	m_action_group->add(Action::create("About", Gtk::Stock::ABOUT), 
+	m_action_group->add(Action::create("About", Stock::ABOUT), 
 		mem_fun(this, &MainWindow::on_about));
 
 	m_uimanager->insert_action_group(m_action_group);
@@ -154,14 +155,16 @@ void MainWindow::build_menu_bar()
 		"	</popup>"
 		"</ui>");
 
-	m_popup_menu = dynamic_cast<Gtk::Menu*>(m_uimanager->get_widget("/PopupMenu"));
-	g_assert(m_popup_menu != 0);
+	m_popup_menu = dynamic_cast<Menu*>(m_uimanager->get_widget("/PopupMenu"));
+	g_assert(m_popup_menu != NULL);
 }
 
 
 void MainWindow::on_popup_menu(GdkEventButton* event)
 {
-	if (m_selected_pkg && m_popup_menu)
+	g_assert(event != NULL);
+
+	if (m_selected_pkg)
 		m_popup_menu->popup(event->button, event->time);
 }
 
@@ -178,16 +181,12 @@ void MainWindow::on_key_press(GdkEventKey* event)
 	if (!m_selected_pkg)
 		return;
 
+	g_assert(event != NULL);
+
 	switch (event->keyval) {
-		case GDK_KEY_Delete:
-			on_unlog();
-			break;
-		case GDK_KEY_Return:
-			on_properties();
-			break;
-		case GDK_KEY_Menu:
-			if (m_popup_menu)
-				m_popup_menu->popup(0, event->time);
+		case GDK_KEY_Delete: on_unlog();		break;
+		case GDK_KEY_Return: on_properties();	break;
+		case GDK_KEY_Menu:   m_popup_menu->popup(0, event->time);
 	}
 }
 
@@ -201,17 +200,17 @@ void MainWindow::on_pkg_selected(Pkg* pkg)
 
 void MainWindow::set_actions_sensitivity()
 {
-	m_action_find->set_sensitive(DB::pkg_cnt() > 0);
-	m_action_properties->set_sensitive(m_selected_pkg);
-	m_action_porgball->set_sensitive(m_selected_pkg);
-	m_action_remove->set_sensitive(m_selected_pkg && Opt::logdir_writable());
-	m_action_unlog->set_sensitive(m_selected_pkg && Opt::logdir_writable());
+	m_action_find		->set_sensitive(DB::pkg_cnt() > 0);
+	m_action_properties	->set_sensitive(m_selected_pkg);
+	m_action_porgball	->set_sensitive(m_selected_pkg);
+	m_action_remove		->set_sensitive(m_selected_pkg && Opt::logdir_writable());
+	m_action_unlog		->set_sensitive(m_selected_pkg && Opt::logdir_writable());
 }
 
 
 void MainWindow::on_about()
 {
-	Gtk::AboutDialog dialog;
+	AboutDialog dialog;
 
 	dialog.set_transient_for(*this);
 	dialog.set_name("grop");
@@ -238,7 +237,7 @@ void MainWindow::on_about()
 
 void MainWindow::on_preferences()
 {
-	if (Preferences::instance(*this) == Gtk::RESPONSE_OK)
+	if (Preferences::instance(*this) == RESPONSE_OK)
 		m_treeview.reset_opts();
 }
 
@@ -272,8 +271,7 @@ void MainWindow::scroll_to_pkg(Pkg* pkg)
 
 void MainWindow::on_unlog()
 {
-	if (!(Opt::logdir_writable() && m_selected_pkg))
-		return;
+	g_return_if_fail(Opt::logdir_writable() && m_selected_pkg);
 
 	if (run_question_dialog("Remove package '" + m_selected_pkg->name() + "' from database ?", this))
 		unlog_pkg(m_selected_pkg);

@@ -12,14 +12,15 @@
 #include "filestreeview.h"
 
 using namespace Grop;
+using namespace Gtk;
 
 
 FilesTreeView::FilesTreeView(Pkg const& pkg)
 :
-	Gtk::TreeView(),
+	TreeView(),
 	m_pkg(pkg),
 	m_columns(),
-	m_model(Gtk::ListStore::create(m_columns))
+	m_model(ListStore::create(m_columns))
 {
 	set_rules_hint();
 	set_vexpand();
@@ -35,7 +36,7 @@ void FilesTreeView::fill_model()
 	m_model->clear();
 
 	for (uint i = 0; i < m_pkg.files().size(); ++i) {
-		Gtk::TreeModel::iterator it = m_model->append();
+		TreeModel::iterator it = m_model->append();
 		File* file = m_pkg.files()[i];
 		(*it)[m_columns.m_file] = file;
 		(*it)[m_columns.m_name] = file->name();
@@ -47,7 +48,7 @@ void FilesTreeView::fill_model()
 void FilesTreeView::add_columns()
 {
 	int id;
-	Gtk::CellRenderer* cell;
+	CellRenderer* cell;
 
 	id = append_column("Name", m_columns.m_name) - 1;
 	g_assert(id == COL_NAME);
@@ -67,17 +68,17 @@ void FilesTreeView::add_columns()
 }
 
 
-void FilesTreeView::name_cell_func(Gtk::CellRenderer* cell, Gtk::TreeModel::iterator const& it)
+void FilesTreeView::name_cell_func(CellRenderer* cell, TreeModel::iterator const& it)
 {
-	Gtk::CellRendererText* cell_text = static_cast<Gtk::CellRendererText*>(cell);
+	CellRendererText* cell_text = static_cast<CellRendererText*>(cell);
 	File* file = (*it)[m_columns.m_file];
 	cell_text->property_foreground() = file->is_missing() ? "red" : "black";
 }
 
 
-void FilesTreeView::size_cell_func(Gtk::CellRenderer* cell, Gtk::TreeModel::iterator const& it)
+void FilesTreeView::size_cell_func(CellRenderer* cell, TreeModel::iterator const& it)
 {
-	Gtk::CellRendererText* cell_text = static_cast<Gtk::CellRendererText*>(cell);
+	CellRendererText* cell_text = static_cast<CellRendererText*>(cell);
 	File* file = (*it)[m_columns.m_file];
 	cell_text->property_foreground() = file->is_missing() ? "red" : "black";
 	cell_text->property_text() = Porg::fmt_size(file->size());

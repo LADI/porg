@@ -17,6 +17,7 @@
 
 using std::string;
 using namespace Grop;
+using namespace Gtk;
 
 float 				DB::s_total_size = 0;
 std::vector<Pkg*> 	DB::s_pkgs;
@@ -28,18 +29,18 @@ DB::DB()
 	g_assert(s_initialized == false);
 	g_assert(Opt::initialized());
 
-	Gtk::MessageDialog dialog("Reading database  (" + Opt::logdir() + ")", false, 
-		Gtk::MESSAGE_INFO, Gtk::BUTTONS_NONE, true);
+	MessageDialog dialog("Reading database  (" + Opt::logdir() + ")", false, 
+		MESSAGE_INFO, BUTTONS_NONE, true);
 	dialog.set_title("grop :: info");
 	
-	Gtk::ProgressBar* progressbar(Gtk::manage(new Gtk::ProgressBar()));;
+	ProgressBar* progressbar(manage(new ProgressBar()));
 	dialog.get_message_area()->pack_start(*progressbar);
-	dialog.set_image(*(Gtk::manage(new Gtk::Image(DATADIR "/pixmaps/grop.png"))));
+	dialog.set_image(*(manage(new Image(DATADIR "/pixmaps/grop.png"))));
 	dialog.show_all();
 
 	Glib::Dir dir(Opt::logdir());
-	int npkgs = std::vector<string>(dir.begin(), dir.end()).size();	
-	s_pkgs.reserve(npkgs);
+	int pkg_cnt = std::vector<string>(dir.begin(), dir.end()).size();	
+	s_pkgs.reserve(pkg_cnt);
 	float cnt = 0;
 
 	for (Glib::DirIterator d = dir.begin(); d != dir.end(); ++d) {
@@ -62,7 +63,7 @@ DB::DB()
 			g_warning("%s", x.what()); 
 		}
 		
-		progressbar->set_fraction(cnt++ / npkgs);
+		progressbar->set_fraction(cnt++ / pkg_cnt);
 		main_iter();
 	}
 
@@ -97,5 +98,6 @@ void DB::remove_pkg(Pkg* pkg)
 	}
 			
 	delete pkg;
+	pkg = NULL;
 }
 
