@@ -23,25 +23,26 @@
 #include <sys/wait.h>
 
 using std::string;
+using namespace Gtk;
 
 Grop::Porgball::Last Grop::Porgball::s_last = 
 	{ Glib::get_home_dir(), PROG_GZIP, 6, false, true };
 
 
-Grop::Porgball::Porgball(Pkg const& pkg, Gtk::Window& parent)
+Grop::Porgball::Porgball(Pkg const& pkg, Window& parent)
 :
-	Gtk::Dialog("grop :: porgball", parent, true),
+	Dialog("grop :: porgball", parent, true),
 	m_pkg(pkg),
 	m_label_progress("", 0.02, 0.5),
 	m_label_tarball("", 0, 0),
 	m_combo_prog(),
 	m_combo_level(),
-	m_filechooser_button(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
+	m_filechooser_button(FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_button_test("_Integrity test", true),
 	m_button_porg_suffix("_porg suffix", true),
-	m_button_close(add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE)),
-	m_button_cancel(add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL)),
-	m_button_ok(add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK)),
+	m_button_close(add_button(Stock::CLOSE, RESPONSE_CLOSE)),
+	m_button_cancel(add_button(Stock::CANCEL, RESPONSE_CANCEL)),
+	m_button_ok(add_button(Stock::OK, RESPONSE_OK)),
 	m_progressbar(),
 	m_tmpfile(),
 	m_pid(0),
@@ -72,25 +73,25 @@ Grop::Porgball::Porgball(Pkg const& pkg, Gtk::Window& parent)
 		m_combo_level.append(Porg::num2str(i));
 	m_combo_level.append("9 (better)");
 
-	Gtk::Box* box_vexpand = Gtk::manage(new Gtk::Box());
-	Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
+	Box* box_vexpand = manage(new Box());
+	Grid* grid = manage(new Grid());
 	grid->set_column_spacing(10);
 	grid->set_row_spacing(10);
 	int row = 0;
-	grid->attach(*(Gtk::manage(new Gtk::Label("Name:", 0., 0.5))), 0, row, 1, 1);
+	grid->attach(*(manage(new Label("Name:", 0., 0.5))), 0, row, 1, 1);
 	grid->attach(m_label_tarball, 1, row, 3, 1);
 	grid->attach(m_button_porg_suffix, 1, ++row, 3, 1);
-	grid->attach(*(Gtk::manage(new Gtk::Label("Save in folder:", 0, 0.5))), 0, ++row, 1, 1);
+	grid->attach(*(manage(new Label("Save in folder:", 0, 0.5))), 0, ++row, 1, 1);
 	grid->attach(m_filechooser_button, 1, row, 3, 1);
-	grid->attach(*(Gtk::manage(new Gtk::Label("Compression:", 0., 0.5))), 0, ++row, 1, 1);
+	grid->attach(*(manage(new Label("Compression:", 0., 0.5))), 0, ++row, 1, 1);
 	grid->attach(m_combo_prog, 1, row, 1, 1);
-	grid->attach(*(Gtk::manage(new Gtk::Label("Level:", 0., 0.5))), 2, row, 1, 1);
+	grid->attach(*(manage(new Label("Level:", 0., 0.5))), 2, row, 1, 1);
 	grid->attach(m_combo_level, 3, row, 1, 1);
 	grid->attach(m_button_test, 1, ++row, 4, 1);
 	grid->attach(*box_vexpand, 0, ++row, 4, 1);
 	grid->attach(m_label_progress, 0, ++row, 3, 1);
 	grid->attach(m_progressbar, 3, row, 1, 1);
-	grid->attach(*(Gtk::manage(new Gtk::Separator())), 0, ++row, 4, 1);
+	grid->attach(*(manage(new Separator())), 0, ++row, 4, 1);
 
 	m_label_tarball.set_hexpand();
 	m_filechooser_button.set_hexpand();
@@ -101,15 +102,16 @@ Grop::Porgball::Porgball(Pkg const& pkg, Gtk::Window& parent)
 
 	m_progressbar.set_pulse_step(0.007);
 
-	get_content_area()->pack_start(*grid, Gtk::PACK_EXPAND_WIDGET);
+	get_content_area()->pack_start(*grid, PACK_EXPAND_WIDGET);
 
 	m_combo_prog.signal_changed().connect(sigc::mem_fun
 		(this, &Grop::Porgball::set_tarball_suffix));
 	m_button_porg_suffix.signal_clicked().connect(sigc::mem_fun
 		(this, &Grop::Porgball::set_tarball_suffix));
-	m_button_cancel->signal_clicked().connect(sigc::mem_fun(*this, &Grop::Porgball::on_cancel));
+	m_button_cancel->signal_clicked().connect(sigc::mem_fun
+		(*this, &Grop::Porgball::on_cancel));
 	
-	get_action_area()->set_layout(Gtk::BUTTONBOX_EDGE);
+	get_action_area()->set_layout(BUTTONBOX_EDGE);
 
 	if (::close(Glib::file_open_tmp(m_tmpfile, "grop")) < 0)
 		m_tmpfile = "/tmp/grop" + Porg::num2str(getpid());
@@ -141,18 +143,18 @@ Grop::Porgball::~Porgball()
 }
 
 
-void Grop::Porgball::instance(Pkg const& pkg, Gtk::Window& parent)
+void Grop::Porgball::instance(Pkg const& pkg, Window& parent)
 {
 	Grop::Porgball obj(pkg, parent);
 	
-	while (!obj.m_close && obj.run() == Gtk::RESPONSE_OK)
+	while (!obj.m_close && obj.run() == RESPONSE_OK)
 		obj.end_create(obj.create_porgball());
 }
 
 
 void Grop::Porgball::on_cancel()
 {
-	g_assert(m_pid > 0);
+	g_return_if_fail(m_pid > 0);
 
 	if (m_pid)
 		kill(m_pid, SIGKILL);
@@ -182,7 +184,7 @@ bool Grop::Porgball::on_delete_event(GdkEventAny*)
 
 void Grop::Porgball::set_children_sensitive(bool setting /* = true */)
 {
-	for (guint i = 0; i < m_children.size(); ++i)
+	for (uint i = 0; i < m_children.size(); ++i)
 		m_children[i]->set_sensitive(setting);
 }
 
@@ -256,13 +258,11 @@ bool Grop::Porgball::create_porgball()
 	// build compression command and run it
 
 	string prog = m_combo_prog.get_active_text();
+	string level = Porg::num2str(m_combo_level.get_active_row_number() + 1);
 
-	std::ostringstream level;
-	level << (m_combo_level.get_active_row_number() + 1);
-	
 	argv.clear();
 	argv.push_back(prog);
-	argv.push_back(string("-") + level.str());
+	argv.push_back("-" + level);
 	argv.push_back("--force");
 	argv.push_back(tarfile);
 	
@@ -316,7 +316,7 @@ void Grop::Porgball::set_tarball_suffix()
 		case PROG_GZIP:		name += ".gz";	break;
 		case PROG_BZIP2:	name += ".bz2"; break;
 		case PROG_XZ:		name += ".xz";	break;
-		default: g_assert_not_reached();
+		default: g_return_if_reached();
 	}
 
 	m_label_tarball.set_text(name);

@@ -10,31 +10,32 @@
 #include "opt.h"
 #include "preferences.h"
 #include <gtkmm/frame.h>
-#include <gtkmm/stock.h>	// Gtk::RESPONSE_OK
+#include <gtkmm/stock.h>	// RESPONSE_OK
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/grid.h>
 
 using std::string;
 using namespace Grop;
+using namespace Gtk;
 
 
 Preferences* Preferences::s_prefs = 0;
 
 
-Preferences::Preferences(Gtk::Window& parent)
+Preferences::Preferences(Window& parent)
 :
-	Gtk::Dialog("preferences", parent, true),
+	Dialog("preferences", parent, true),
 	m_buttons(),
 	m_button_hour("Show _hour in date", true)
 {
 	set_border_width(4);
 	set_resizable(false);
 
-	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+	add_button(Stock::CANCEL, RESPONSE_CANCEL);
+	add_button(Stock::OK, RESPONSE_OK);
 
-	Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
+	Grid* grid = manage(new Grid());
 	
 	string col_names[] = { "_Name", "_Size", "_Files", "_Date", "S_ummary" };
 
@@ -47,15 +48,15 @@ Preferences::Preferences(Gtk::Window& parent)
 	m_buttons[0].set_active();
 	m_buttons[0].set_sensitive(false);
 
-	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame(" Visible columns "));
+	Frame* frame = manage(new Frame(" Visible columns "));
 	frame->set_border_width(get_border_width());
 	frame->add(*grid);
 
-	Gtk::Box* box = get_content_area();
+	Box* box = get_content_area();
 	box->set_spacing(get_border_width());
 	box->pack_start(*frame);
 	box->pack_start(m_button_hour);
-	box->pack_start(*(Gtk::manage(new Gtk::Separator())));
+	box->pack_start(*(manage(new Separator())));
 
 	show_all();
 }
@@ -79,7 +80,7 @@ void Preferences::save_opts()
 }
 
 
-int Preferences::instance(Gtk::Window& parent)
+int Preferences::instance(Window& parent)
 {
 	if (!s_prefs)
 		s_prefs = new Preferences(parent);
@@ -89,7 +90,7 @@ int Preferences::instance(Gtk::Window& parent)
 	int response = s_prefs->run();
 	s_prefs->hide();
 
-	if (response == Gtk::RESPONSE_OK)
+	if (response == RESPONSE_OK)
 		s_prefs->save_opts();
 
 	return response;

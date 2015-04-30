@@ -23,17 +23,18 @@
 using std::string;
 using sigc::mem_fun;
 using namespace Grop;
+using namespace Gtk;
 
 
-RemovePkg::RemovePkg(Pkg& pkg, Gtk::Window& parent)
+RemovePkg::RemovePkg(Pkg& pkg, Window& parent)
 :
-	Gtk::Dialog("grop :: remove package", parent, true),
+	Dialog("grop :: remove package", parent, true),
 	m_error(false),
 	m_label(),
 	m_progressbar(),
 	m_expander("Details"),
-	m_button_close(Gtk::Stock::CLOSE),
-	m_text_buffer(Gtk::TextBuffer::create()),
+	m_button_close(Stock::CLOSE),
+	m_text_buffer(TextBuffer::create()),
 	m_text_view(m_text_buffer),
 	m_tag_ok(m_text_buffer->create_tag()),
 	m_tag_skipped(m_text_buffer->create_tag()),
@@ -55,28 +56,28 @@ RemovePkg::RemovePkg(Pkg& pkg, Gtk::Window& parent)
 	m_text_view.set_cursor_visible(false);
 	m_text_view.set_right_margin(get_border_width());
 	m_text_view.set_left_margin(get_border_width());
-	m_text_view.override_background_color(Gdk::RGBA("black"), Gtk::STATE_FLAG_NORMAL);
+	m_text_view.override_background_color(Gdk::RGBA("black"), STATE_FLAG_NORMAL);
 
 	m_tag_ok->property_foreground() = "white";
 	m_tag_skipped->property_foreground() = "#ffff44";	// light yellow
 	m_tag_error->property_foreground() = "#ff4444";		// light red
 
-	Gtk::ScrolledWindow* scrolled_window = Gtk::manage(new Gtk::ScrolledWindow());
+	ScrolledWindow* scrolled_window = manage(new ScrolledWindow());
 	scrolled_window->add(m_text_view);
 
 	m_expander.add(*scrolled_window);
 
-	Gtk::Box* label_box = Gtk::manage(new Gtk::Box());
-	label_box->pack_start(m_label, Gtk::PACK_SHRINK);
+	Box* label_box = manage(new Box());
+	label_box->pack_start(m_label, PACK_SHRINK);
 
-	Gtk::Box* box = get_content_area();
+	Box* box = get_content_area();
 	box->set_spacing(get_border_width());
-	box->pack_start(*label_box, Gtk::PACK_SHRINK);
-	box->pack_start(m_progressbar, Gtk::PACK_SHRINK);
-	box->pack_start(m_expander, Gtk::PACK_EXPAND_WIDGET);
+	box->pack_start(*label_box, PACK_SHRINK);
+	box->pack_start(m_progressbar, PACK_SHRINK);
+	box->pack_start(m_expander, PACK_EXPAND_WIDGET);
 
 	m_button_close.set_sensitive(false);
-	add_action_widget(m_button_close, Gtk::RESPONSE_CLOSE);
+	add_action_widget(m_button_close, RESPONSE_CLOSE);
 
 	show_all();
 	run();
@@ -89,7 +90,7 @@ void RemovePkg::on_expander_changed()
 }
 
 
-bool RemovePkg::instance(Pkg& pkg, Gtk::Window& parent)
+bool RemovePkg::instance(Pkg& pkg, Window& parent)
 {
 	RemovePkg remove_pkg(pkg, parent);
 	
@@ -99,10 +100,10 @@ bool RemovePkg::instance(Pkg& pkg, Gtk::Window& parent)
 }
 
 
-void RemovePkg::report(string const& msg, Glib::RefPtr<Gtk::TextTag> const& tag)
+void RemovePkg::report(string const& msg, Glib::RefPtr<TextTag> const& tag)
 {
-	m_text_buffer->insert_with_tag(m_text_buffer->end(), msg + '\n', tag);
-	Gtk::TextIter end = m_text_buffer->end();
+	m_text_buffer->insert_with_tag(m_text_buffer->end(), msg + "\n", tag);
+	TextIter end = m_text_buffer->end();
 	m_text_view.scroll_to(end);
 }
 
@@ -114,7 +115,7 @@ void RemovePkg::remove()
 
 	for (Pkg::const_iter f(m_pkg.files().begin()); f != m_pkg.files().end(); ++f) {
 		
-		string file = (*f)->name();
+		string const& file = (*f)->name();
 
 		m_progressbar.set_fraction(cnt++ / m_pkg.nfiles());
 		main_iter();
@@ -140,7 +141,8 @@ void RemovePkg::remove()
 
 		// an error occurred
 		else if (errno != ENOENT) {
-			report("Failed to remove '" + file + "': " + Glib::strerror(errno), m_tag_error);
+			report("Failed to remove '" + file + "': " + 
+				Glib::strerror(errno), m_tag_error);
 			cnt_error++;
 			m_error = true;
 		}

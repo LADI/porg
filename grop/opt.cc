@@ -34,11 +34,8 @@ Opt::Opt()
 	m_rcdir(Glib::get_user_config_dir() + "/grop"),
 	m_groprc(m_rcdir + "/groprc")
 {
-	g_assert(s_initialized == false);
-
 	read_config_file();
 	set_command_line_options();
-
 	s_initialized = true;
 }
 

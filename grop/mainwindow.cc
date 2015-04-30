@@ -22,7 +22,6 @@
 #include <gtkmm/uimanager.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/scrolledwindow.h>
-#include <sstream>
 
 
 using std::string;
@@ -46,8 +45,7 @@ MainWindow::MainWindow()
 	m_popup_menu(0),
 	m_selected_pkg(0)
 {
-	g_assert(Opt::initialized());
-	g_assert(DB::initialized());
+	g_return_if_fail(Opt::initialized() && DB::initialized());
 
 	set_default_size(Opt::width(), Opt::height());
 	move(Opt::xpos(), Opt::ypos());
@@ -93,11 +91,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::update_statusbar()
 {
-	std::ostringstream os;
-	os << DB::pkg_cnt() << " packages | " << Porg::fmt_size(DB::total_size());
+	string msg = Porg::num2str(DB::pkg_cnt()) + " packages | " 
+		+ Porg::fmt_size(DB::total_size());
+
 	if (DB::total_size() < Porg::KILOBYTE)
-		os << " bytes";
-	m_statusbar.push(os.str());
+		msg += " bytes";
+
+	m_statusbar.push(msg);
 }
 
 
@@ -156,16 +156,15 @@ void MainWindow::build_menu_bar()
 		"</ui>");
 
 	m_popup_menu = dynamic_cast<Menu*>(m_uimanager->get_widget("/PopupMenu"));
-	g_assert(m_popup_menu != NULL);
 }
 
 
 void MainWindow::on_popup_menu(GdkEventButton* event)
 {
-	g_assert(event != NULL);
-
-	if (m_selected_pkg)
+	if (m_selected_pkg) {
+		g_return_if_fail(event != NULL && m_popup_menu != NULL);
 		m_popup_menu->popup(event->button, event->time);
+	}
 }
 
 
@@ -181,12 +180,21 @@ void MainWindow::on_key_press(GdkEventKey* event)
 	if (!m_selected_pkg)
 		return;
 
-	g_assert(event != NULL);
+	g_return_if_fail(event != NULL);
 
 	switch (event->keyval) {
-		case GDK_KEY_Delete: on_unlog();		break;
-		case GDK_KEY_Return: on_properties();	break;
-		case GDK_KEY_Menu:   m_popup_menu->popup(0, event->time);
+		
+		case GDK_KEY_Delete: 
+			on_unlog();
+			break;
+		
+		case GDK_KEY_Return:
+			on_properties();
+			break;
+		
+		case GDK_KEY_Menu:   
+			g_return_if_fail(m_popup_menu != NULL);
+			m_popup_menu->popup(0, event->time);
 	}
 }
 
@@ -264,7 +272,7 @@ void MainWindow::on_porgball()
 
 void MainWindow::scroll_to_pkg(Pkg* pkg)
 {
-	g_assert(pkg != 0);
+	g_return_if_fail(pkg != NULL);
 	m_treeview.scroll_to_pkg(pkg);
 }
 
@@ -282,8 +290,7 @@ void MainWindow::on_unlog()
 
 void MainWindow::on_remove()
 {
-	if (!(Opt::logdir_writable() && m_selected_pkg))
-		return;
+	g_return_if_fail(Opt::logdir_writable() && m_selected_pkg != NULL);
 
 	if (!run_question_dialog("Remove package '" + m_selected_pkg->name() + "' ?", this))
 		return;
@@ -295,7 +302,7 @@ void MainWindow::on_remove()
 
 void MainWindow::unlog_pkg(Pkg* pkg)
 {
-	g_assert(pkg != 0);
+	g_return_if_fail(pkg != NULL);
 
 	try
 	{
