@@ -271,9 +271,11 @@ void MainWindow::scroll_to_pkg(Pkg* pkg)
 
 void MainWindow::on_unlog()
 {
-	g_return_if_fail(Opt::logdir_writable() && m_selected_pkg);
+	if (!(Opt::logdir_writable() && m_selected_pkg))
+		return;
 
-	if (run_question_dialog("Remove package '" + m_selected_pkg->name() + "' from database ?", this))
+	if (run_question_dialog("Remove package '" + m_selected_pkg->name() 
+		+ "' from database ?", this))
 		unlog_pkg(m_selected_pkg);
 }
 

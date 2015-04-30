@@ -26,8 +26,7 @@ bool				DB::s_initialized = false;
 
 DB::DB()
 {
-	g_assert(s_initialized == false);
-	g_assert(Opt::initialized());
+	g_return_if_fail(Opt::initialized());
 
 	MessageDialog dialog("Reading database  (" + Opt::logdir() + ")", false, 
 		MESSAGE_INFO, BUTTONS_NONE, true);
@@ -85,7 +84,7 @@ void DB::init()
 
 void DB::remove_pkg(Pkg* pkg)
 {
-	g_assert(pkg != NULL);
+	g_return_if_fail(pkg != NULL);
 
 	pkg->unlog();
 

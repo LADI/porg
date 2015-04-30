@@ -23,8 +23,7 @@ MainTreeView::MainTreeView()
 	m_columns(),
 	m_model(ListStore::create(m_columns))
 {
-	g_assert(DB::initialized());
-	g_assert(Opt::initialized());
+	g_return_if_fail(DB::initialized() && Opt::initialized());
 
 	set_rules_hint();
 	set_vexpand();
@@ -92,6 +91,7 @@ void MainTreeView::set_columns_visibility()
 
 void MainTreeView::fill_model()
 {
+	g_return_if_fail(m_model->children().empty());
 	m_model->clear();
 
 	for (DB::const_iter p = DB::pkgs().begin(); p != DB::pkgs().end(); ++p) {
@@ -108,8 +108,10 @@ void MainTreeView::fill_model()
 
 void MainTreeView::remove_pkg(Pkg const* const pkg)
 {
-	TreeModel::Children children = m_model->children();
+	g_return_if_fail(pkg != NULL);
 
+	TreeModel::Children children = m_model->children();
+	
 	for (iterator it = children.begin(); it != children.end(); ++it) {
 		if ((*it)[m_columns.m_pkg] == pkg) {
 			m_model->erase(it);
@@ -135,12 +137,8 @@ void MainTreeView::date_cell_func(CellRenderer* cell, iterator const& it)
 
 void MainTreeView::on_selection_changed()
 {
-	iterator it(get_selection()->get_selected());
-	
-	if (it)
-		signal_pkg_selected.emit((*it)[m_columns.m_pkg]);
-	else
-		signal_pkg_selected.emit(0);
+	iterator i = get_selection()->get_selected();
+	signal_pkg_selected.emit(i ? (*i)[m_columns.m_pkg] : (Pkg*) 0);
 }
 
 
@@ -178,7 +176,7 @@ bool MainTreeView::on_key_press_event(GdkEventKey* event)
 
 void MainTreeView::scroll_to_pkg(Pkg* pkg)
 {
-	g_assert(pkg != NULL);
+	g_return_if_fail(pkg != NULL);
 
 	TreeModel::Children children = m_model->children();
 

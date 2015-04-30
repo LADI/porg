@@ -33,6 +33,7 @@ FilesTreeView::FilesTreeView(Pkg const& pkg)
 
 void FilesTreeView::fill_model()
 {
+	g_warn_if_fail(m_model->children().empty());
 	m_model->clear();
 
 	for (uint i = 0; i < m_pkg.files().size(); ++i) {
@@ -49,22 +50,22 @@ void FilesTreeView::add_columns()
 {
 	int id;
 	CellRenderer* cell;
+	TreeViewColumn* col;
 
 	id = append_column("Name", m_columns.m_name) - 1;
-	g_assert(id == COL_NAME);
 	cell = get_column_cell_renderer(id);
-	get_column(id)->set_cell_data_func(*cell, mem_fun(this, &FilesTreeView::name_cell_func));
+	col = get_column(id);
+	col->set_cell_data_func(*cell, mem_fun(this, &FilesTreeView::name_cell_func));
+	col->set_resizable();
+	col->set_sort_column(id);
 
 	id = append_column("Size", m_columns.m_size) - 1;
-	g_assert(id == COL_SIZE);
 	cell = get_column_cell_renderer(id);
+	col = get_column(id);
 	cell->set_alignment(1, 0.5);
-	get_column(id)->set_cell_data_func(*cell, mem_fun(this, &FilesTreeView::size_cell_func));
-
-	for (int i = 0; i < NCOLS; ++i) {
-		get_column(i)->set_resizable();
-		get_column(i)->set_sort_column(i);
-	}
+	col->set_cell_data_func(*cell, mem_fun(this, &FilesTreeView::size_cell_func));
+	col->set_resizable();
+	col->set_sort_column(id);
 }
 
 

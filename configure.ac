@@ -44,7 +44,7 @@ if echo "$PACKAGE_VERSION" | grep -q svn; then
 	AC_DEFINE([GTK_DISABLE_DEPRECATED], [1], [Disable gtkmm-2.4 API])
 else
 	AC_DEFINE([NDEBUG], [1], [Disable libc assertions])
-	AC_DEFINE([G_DISABLE_ASSERT], [1], [Disable glib assertions])
+##	AC_DEFINE([G_DISABLE_ASSERT], [1], [Disable glib assertions])
 fi
 
 AC_DEFINE_UNQUOTED([RELEASEDATE], ["$RELEASEDATE"], [Release date])

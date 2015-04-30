@@ -38,8 +38,6 @@ class FilesTreeView : public Gtk::TreeView
 
 	};	// class FilesTreeView::ModelColumns
 
-	enum { COL_NAME, COL_SIZE, NCOLS };
-
 	public:
 
 	FilesTreeView(Pkg const&);
