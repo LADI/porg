@@ -15,9 +15,7 @@
 #include "newpkg.h"
 #include "logger.h"
 #include <fstream>
-#include <sstream>
 #include <iterator>
-#include <algorithm>
 #include <glob.h>
 #include <sys/wait.h>
 

@@ -397,13 +397,9 @@ void Opt::set_sort_type(string const& s)
 	else
 		die_help("'" + s + "': Invalid argument for option '-S|--sort'");
 
-	switch (s_sort_type) {
-		case SORT_BY_DATE:
-		case SORT_BY_NFILES:
-			if (s_mode != MODE_LIST_PKGS)
-				die_help("'" + s + "': Invalid argument for option '-S|--sort'");
-		default: break;
-	}
+	if (s_mode != MODE_LIST_PKGS 
+	&& (s_sort_type == SORT_BY_DATE || s_sort_type == SORT_BY_NFILES))
+		die_help("'" + s + "': Invalid argument for option '-S|--sort'");
 }
 
 
