@@ -81,7 +81,6 @@ string Porg::fmt_date(time_t date, bool print_hour)
 }
 
 
-
 // 
 // Match @inpath against each path in @list, following the standard shell-like
 // expansion, but with the following exception: If a path in the list does not

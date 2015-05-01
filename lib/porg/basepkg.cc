@@ -135,7 +135,7 @@ string BasePkg::description_str(bool debug /* = false */) const
 	else {
 		std::istringstream is(m_description);
 		for (string buf; getline(is, buf); )
-			desc += '\n' + head + "   " + buf;
+			desc += "\n" + head + "   " + buf;
 	}
 
 	return desc;
@@ -144,16 +144,16 @@ string BasePkg::description_str(bool debug /* = false */) const
 
 string BasePkg::format_description() const
 {
-	string code(string("#") + CODE_DESCRIPTION + ':');
+	string code(string("#") + CODE_DESCRIPTION + ":");
 
 	if (m_description.empty())
-		return code + '\n';
+		return code + "\n";
 
 	string ret;
 	std::istringstream is(m_description);
 
 	for (string buf; getline(is, buf); )
-		ret += code + buf + '\n';
+		ret += code + buf + "\n";
 
 	return ret;
 }
@@ -236,7 +236,7 @@ void BasePkg::sort_files(	sort_t type,	// = SORT_BY_NAME
 
 string BasePkg::get_base(string const& name)
 {
-	for (string::size_type i = 1; i < name.size(); ++i) {
+	for (uint i = 1; i < name.size(); ++i) {
 		if (isdigit(name.at(i)) && name.at(i - 1) == '-')
 			return name.substr(0, i - 1);
 	}
@@ -246,7 +246,7 @@ string BasePkg::get_base(string const& name)
 
 string BasePkg::get_version(string const& name)
 {
-	for (string::size_type i = 1; i < name.size(); ++i) {
+	for (uint i = 1; i < name.size(); ++i) {
 		if (isdigit(name.at(i)) && name.at(i - 1) == '-')
 			return name.substr(i);
 	}
