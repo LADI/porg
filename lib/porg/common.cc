@@ -20,27 +20,6 @@ static string strip_repeated(string const&, char);
 //
 // Create a human readable size
 //
-string Porg::fmt_size(ulong size)
-{
-	std::ostringstream s;
-	
-	if (size < KILOBYTE)
-		s << size;
-	else if (size < (10 * KILOBYTE))
-		s << std::setprecision(2) << static_cast<float>(size) / KILOBYTE << "k";
-	else if (size < MEGABYTE)
-		s << size / KILOBYTE << "k";
-	else if (size < (10 * MEGABYTE))
-		s << std::setprecision(2) << static_cast<float>(size) / MEGABYTE << "M";
-	else if (size < GIGABYTE)
-		s << size / MEGABYTE << "M";
-	else
-		s << std::setprecision(2) << static_cast<float>(size) / GIGABYTE << "G";
-		
-	return s.str();
-}
-
-
 string Porg::fmt_size(float size)
 {
 	std::ostringstream s;

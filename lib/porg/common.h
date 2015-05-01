@@ -69,7 +69,6 @@ namespace Porg
 	}
 
 
-	extern std::string fmt_size(ulong size);
 	extern std::string fmt_size(float size);
 	extern std::string fmt_date(time_t date, bool print_hour);
 	extern std::string strip_trailing(std::string const&, char);
