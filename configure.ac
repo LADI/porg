@@ -51,7 +51,7 @@ AC_DEFINE_UNQUOTED([RELEASEDATE], ["$RELEASEDATE"], [Release date])
 AC_SUBST([RELEASEDATE])
 
 EXCLUDE="/tmp"
-for dir in /dev /proc /selinux /sys /run /mnt /media /cdrom; do
+for dir in /dev /proc /selinux /sys /run; do
 	test -e "$dir" && EXCLUDE="$EXCLUDE:$dir"
 done
 AC_DEFINE_UNQUOTED([EXCLUDE], ["$EXCLUDE"], [List of paths to skip])
