@@ -110,7 +110,7 @@ string strip_repeated(string const& str, char c)
 
 
 //
-// Strip trailing occurrences of character i@c in @str. If all characters in
+// Strip trailing occurrences of character @c in @str. If all characters in
 // @str are @c, leave one of them unstripped.
 //
 string Porg::strip_trailing(string const& str, char c)

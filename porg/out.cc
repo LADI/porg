@@ -21,11 +21,9 @@ void Out::vrb(string const& msg, int errno_ /* = 0 */)
 {
 	if (verbose()) {
 		if (errno_)
-			cerr << "porg: ";
-		cerr << msg;
-		if (errno_)
-			cerr << ": " << strerror(errno_);
-		cerr << '\n';
+			cerr << "porg: " << msg << ": " << strerror(errno_) << "\n";
+		else
+			cerr << msg << "\n";
 	}
 }
 

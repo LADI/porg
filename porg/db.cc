@@ -70,10 +70,8 @@ void DB::get_pkgs(vector<string> const& args)
 		
 		bool found = false;
 
-		for (string name; dir.read(name); ) {
-			if (match_pkg(args[i], name) && add_pkg(name))
-				found = true;
-		}
+		for (string name; dir.read(name); )
+			found |= (match_pkg(args[i], name) && add_pkg(name));
 
 		if (!found) {
 			Out::vrb("porg: " + args[i] + ": Package not logged");
