@@ -30,7 +30,7 @@ BaseOpt::BaseOpt()
 	if (!porgrc)
 		return;
 
-	Rexp re("^([A-Z_]+)=(.*)$");
+	Rexp re("^([a-z_]+)=(.*)$", REG_ICASE);
 
 	for (string buf, opt, val; getline(porgrc, buf); ) {
 
@@ -39,13 +39,13 @@ BaseOpt::BaseOpt()
 			opt = re.match(1);
 			val = re.match(2);
 			
-			if (opt == "LOGDIR")
+			if (opt == "logdir")
 				s_logdir = sh_expand(val);
-			else if (opt == "INCLUDE")
+			else if (opt == "include")
 				s_include = val;
-			else if (opt == "EXCLUDE")
+			else if (opt == "exclude")
    				s_exclude = val;
-			else if (opt == "REMOVE_SKIP")
+			else if (opt == "remove_skip")
    				s_remove_skip = val;
 		}
 	}

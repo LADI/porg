@@ -7,6 +7,7 @@ SVN
 	  installation). Experimental. Please report any error.
 	+ Removed /mnt, /media and /cdrom from the default EXCLUDE (thanks
 	  Tomoaki Nishiyama).
+	+ Allow lowercase'd variables in porgrc (like 'include').
 
 
 Version 0.8 (13 April 2015)
