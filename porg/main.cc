@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
 		if (Opt::mode() == MODE_LOG) {
 			Logger::run();
-			exit(g_exit_status);
+			return g_exit_status;
 		}
 
 		DB db;
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 			db.get_pkgs(Opt::args());
 
 		if (db.empty())
-			exit(g_exit_status);
+			return g_exit_status;
 
 		db.sort_pkgs(Opt::sort_type(), Opt::reverse_sort());
 
@@ -60,6 +60,6 @@ int main(int argc, char* argv[])
 		g_exit_status = EXIT_FAILURE;
 	}
 
-	exit(g_exit_status);
+	return g_exit_status;
 }
 
