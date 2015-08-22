@@ -31,9 +31,14 @@ Opt::Opt()
 :
 	Porg::BaseOpt(),
 	Glib::KeyFile(),
-	m_rcdir(Glib::get_user_config_dir() + "/grop"),
-	m_groprc(m_rcdir + "/groprc")
+	m_groprc()
 {
+	string dir(Glib::get_home_dir() + "/.config");
+	mkdir(dir.c_str(), 0700);
+	dir += "/grop";
+	mkdir(dir.c_str(), 0700);
+	m_groprc = dir + "/groprc";
+
 	read_config_file();
 	set_command_line_options();
 	s_initialized = true;
@@ -49,12 +54,8 @@ Opt::~Opt()
 	set_integer("gui", "ypos", s_ypos);
 	set_boolean_list("gui", "columns", s_columns);
 
-	mkdir(m_rcdir.c_str(), 0700);
-
 	std::ofstream os(m_groprc.c_str());
-	if (os)
-		os << to_data();
-	else
+	if (!(os << to_data()))
 		g_warning("Cannot open file '%s' for writing", m_groprc.c_str());
 }
 

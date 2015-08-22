@@ -45,7 +45,6 @@ class Opt : public Porg::BaseOpt, public Glib::KeyFile
 	void read_config_file();
 	void set_command_line_options();
 	
-	std::string m_rcdir;
 	std::string m_groprc;
 
 	static bool s_hour;

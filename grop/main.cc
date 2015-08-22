@@ -12,8 +12,10 @@
 #include "mainwindow.h"
 #include "util.h"
 #include <gtkmm/main.h>
+#include <fstream>
 
 static void show_error(std::string msg, bool gtk_started);
+static void create_pid_file();
 
 
 int main(int argc, char* argv[])
@@ -24,9 +26,15 @@ int main(int argc, char* argv[])
 	{
 		Grop::Opt::init();
 		Gtk::Main kit(argc, argv, Grop::Opt::context());
+
 		gtk_started = true;
+		
+		if (!geteuid())
+			create_pid_file();
+		
 		Grop::DB::init();
 		Grop::MainWindow window;
+		
 		kit.run(window);
 	}
 
@@ -39,6 +47,8 @@ int main(int argc, char* argv[])
 	{
 		show_error(x.what(), gtk_started);
 	}
+
+	remove(PIDFILEDIR "/grop.pid");
 }
 
 
@@ -49,4 +59,26 @@ void show_error(std::string msg, bool gtk_started)
 	else
 		std::cerr << "grop: " << msg << '\n';
 }
+
+
+//
+// create temp file carrying PID for later retrieval
+//
+void create_pid_file()
+{
+/*
+	std::string pidfile(PIDFILEDIR "/grop.pid");
+
+	if (!access(pidfile.c_str(), W_OK))
+		throw Porg::Error("Grop is already running");
+
+	Porg::FileStream<std::ofstream> os(pidfile);
+	
+	if (!(os << getpid())) {
+		throw Porg::Error(std::string("Error writing to PID file '") 
+			+ pidfile + "'", errno);
+	}
+*/
+}
+
 

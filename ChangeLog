@@ -9,6 +9,11 @@ SVN
 	  Tomoaki Nishiyama).
 	+ Allow lowercase'd variables in porgrc (like 'include').
 
+	Changes in grop:
+
+	+ Bugfix: When running grop as root, save config file in directory
+	  '/root/.config/grop' (it was saved in the ordinary user home dir).
+
 
 Version 0.8 (13 April 2015)
 ---------------------------
