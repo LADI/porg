@@ -69,9 +69,6 @@ AC_ARG_ENABLE([grop],
 	[enable_grop=$enableval], [enable_grop=yes])
 AM_CONDITIONAL([ENABLE_GROP], [test "$enable_grop" = yes])
 
-test -d /run && PIDFILEDIR="/run" || PIDFILEDIR="/var/run"
-AC_DEFINE_UNQUOTED([PIDFILEDIR], ["$PIDFILEDIR"], [pid file directory])
-
 
 #================
 # Check programs
