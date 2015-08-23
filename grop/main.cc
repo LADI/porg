@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		Grop::Lock::init();
 		Grop::Opt::init();
 		Gtk::Main kit(argc, argv, Grop::Opt::context());
 		gtk_started = true;
+		Grop::Lock::init();
 		Grop::DB::init();
 		Grop::MainWindow window;
 		kit.run(window);

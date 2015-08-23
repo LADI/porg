@@ -23,7 +23,21 @@ Lock::Lock()
 	if (!access(s_lockfile.c_str(), F_OK))
 		throw Porg::Error("Grop is already running");
 	
-	set_signal_handler();
+	// set signal_handler
+
+	struct sigaction sa;
+	memset(&sa, 0, sizeof(struct sigaction));
+	
+	sa.sa_handler = signal_handler;	
+	sigaction(SIGHUP,  &sa, NULL);
+	sigaction(SIGINT,  &sa, NULL);
+	sigaction(SIGTERM, &sa, NULL);	
+	
+	// prevent child processes from becoming zombies
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGCHLD, &sa, NULL);
+
+	// create lock file
 
 	std::ofstream f(s_lockfile.c_str());
 }
@@ -52,21 +66,5 @@ void Lock::signal_handler(int)
 {
 	stop();
 	exit(EXIT_SUCCESS);
-}
-
-
-void Lock::set_signal_handler()
-{
-	struct sigaction sa;
-	memset(&sa, 0, sizeof(struct sigaction));
-	
-	sa.sa_handler = signal_handler;	
-	sigaction(SIGHUP,  &sa, NULL);
-	sigaction(SIGINT,  &sa, NULL);
-	sigaction(SIGTERM, &sa, NULL);
-	
-	// prevent child processes from becoming zombies
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGCHLD, &sa, NULL);
 }
 

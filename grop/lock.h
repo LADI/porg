@@ -28,7 +28,6 @@ class Lock
 	~Lock();
 
 	static void stop();
-	static void set_signal_handler();
 	static void signal_handler(int);
 	
 	static std::string const s_lockfile;
