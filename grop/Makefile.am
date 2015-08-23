@@ -14,6 +14,7 @@ noinst_HEADERS = \
 	preferences.h \
 	filestreeview.h \
 	infotextview.h \
+	lock.h \
 	maintreeview.h
 
 if ENABLE_GROP
@@ -34,6 +35,7 @@ grop_SOURCES = \
 	preferences.cc \
 	maintreeview.cc \
 	db.cc \
+	lock.cc \
 	opt.cc
 
 grop_CXXFLAGS = \

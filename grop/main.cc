@@ -11,6 +11,7 @@
 #include "db.h"
 #include "mainwindow.h"
 #include "util.h"
+#include "lock.h"
 #include <gtkmm/main.h>
 #include <fstream>
 
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		Grop::Lock::init();
 		Grop::Opt::init();
 		Gtk::Main kit(argc, argv, Grop::Opt::context());
 		gtk_started = true;

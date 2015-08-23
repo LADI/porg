@@ -7,12 +7,13 @@ SVN
 	  installation). Experimental. Please report any error.
 	+ Removed /mnt, /media and /cdrom from the default EXCLUDE (thanks
 	  Tomoaki Nishiyama).
-	+ Allow lowercase'd variables in porgrc (like 'include').
+	+ Allow lowercase variable names in porgrc (like 'include=...').
 
 	Changes in grop:
 
 	+ Bugfix: When running grop as root, save config file in directory
 	  '/root/.config/grop' (it was saved in the ordinary user home dir).
+	+ Do not allow running multiple grop instances at the same time.
 
 
 Version 0.8 (13 April 2015)
