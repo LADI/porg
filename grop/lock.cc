@@ -9,6 +9,7 @@
 #include "config.h"
 #include "lock.h"
 #include "porg/common.h"
+#include <csignal>
 #include <fstream>
 #include <glibmm/miscutils.h>
 
