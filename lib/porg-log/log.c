@@ -64,7 +64,6 @@ static void porg_vprintf(const char* fmt, va_list ap)
 	if (porg_debug) {
 		fflush(stdout);
 		fputs("porg-log :: ", stderr);
-		/* XXX vfprintf is not always available */
 		vfprintf(stderr, fmt, ap);
 		fputs("\n", stderr);
 	}
