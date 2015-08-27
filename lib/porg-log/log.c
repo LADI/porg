@@ -13,10 +13,12 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-#define PORG_HAVE_64	(HAVE_OPEN64 && HAVE_CREAT64 && HAVE_FOPEN64 \
-						 && HAVE_FREOPEN64)
-#define PORG_HAVE_AT	(HAVE_OPENAT && HAVE_LINKAT && HAVE_SYMLINKAT \
-						 && HAVE_RENAMEAT)
+#ifndef RTLD_NEXT
+#	define RTLD_NEXT ((void *) -1l)
+#endif
+
+#define HAVE_64_FUNCS (HAVE_OPEN64 && HAVE_CREAT64 && HAVE_FOPEN64 && HAVE_FREOPEN64)
+#define HAVE_AT_FUNCS (HAVE_OPENAT && HAVE_LINKAT && HAVE_SYMLINKAT && HAVE_RENAMEAT)
 
 #define PORG_BUFSIZE  4096
 
@@ -28,14 +30,14 @@ static int	(*libc_symlink)		(const char*, const char*);
 static FILE*(*libc_fopen)		(const char*, const char*);
 static FILE*(*libc_freopen)		(const char*, const char*, FILE*);
 
-#if PORG_HAVE_AT
+#if HAVE_AT_FUNCS
 static int	(*libc_openat)		(int, const char*, int, ...);
 static int	(*libc_renameat)	(int, const char*, int, const char*);
 static int	(*libc_linkat)		(int, const char*, int, const char*, int);
 static int	(*libc_symlinkat)	(const char*, int, const char*);
 #endif
 
-#if PORG_HAVE_64
+#if HAVE_64_FUNCS
 static int	(*libc_open64)		(const char*, int, ...);
 static int	(*libc_creat64)		(const char*, mode_t);
 static FILE*(*libc_fopen64)		(const char*, const char*);
@@ -121,8 +123,6 @@ static void* porg_dlsym(const char* symbol)
 
 	dlerror();
 
-	/* XXX: old versions of libc don't define RTLD_NEXT, we should dlopen libc
-	        in those cases */
 	if (!(ret = dlsym(RTLD_NEXT, symbol))) {
 		err = (char*)dlerror();
 		porg_die("dlsym(RTLD_NEXT, \"%s\"): %s", symbol, err ? err : "failed");
@@ -154,14 +154,14 @@ static void porg_init()
 	libc_fopen 		= porg_dlsym("fopen");
 	libc_freopen 	= porg_dlsym("freopen");
 
-#if PORG_HAVE_64
+#if HAVE_64_FUNCS
 	libc_open64 	= porg_dlsym("open64");
 	libc_creat64 	= porg_dlsym("creat64");
 	libc_fopen64 	= porg_dlsym("fopen64");
 	libc_freopen64 	= porg_dlsym("freopen64");
 #endif
 
-#if PORG_HAVE_AT
+#if HAVE_AT_FUNCS
 	libc_openat 	= porg_dlsym("openat");
 	libc_renameat	= porg_dlsym("renameat");
 	libc_linkat		= porg_dlsym("linkat");
@@ -376,7 +376,7 @@ FILE* freopen(const char* path, const char* mode, FILE* stream)
 }
 
 
-#if PORG_HAVE_64
+#if HAVE_64_FUNCS
 
 int open64(const char* path, int flags, ...)
 {
@@ -443,10 +443,10 @@ FILE* freopen64(const char* path, const char* mode, FILE* stream)
 	return ret;
 }
 
-#endif /* PORG_HAVE_64 */
+#endif /* HAVE_64_FUNCS */
 
 
-#if PORG_HAVE_AT
+#if HAVE_AT_FUNCS
 
 int openat(int fd, const char* path, int flags, ...)
 {
@@ -525,7 +525,7 @@ int symlinkat(const char* oldpath, int newfd, const char* newpath)
 	return ret;
 }
 
-#endif	/* PORG_HAVE_AT */
+#endif	/* HAVE_AT_FUNCS */
 
 
 #if HAVE_OPENAT64
