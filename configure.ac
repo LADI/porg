@@ -101,7 +101,6 @@ fi
 # Check types
 #=============
 
-AC_TYPE_MODE_T
 AC_TYPE_SIZE_T
 
 AC_CHECK_TYPE([uint], [unsigned int])

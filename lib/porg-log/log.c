@@ -274,8 +274,7 @@ goto_end:
 int open(const char* path, int flags, ...)
 {
 	va_list a;
-	mode_t mode;
-	int accmode, ret;
+	int mode, accmode, ret;
 
 	/* this fixes a bug when the installer program calls jemalloc 
 	   (thanks Masahiro Kasahara) */
@@ -285,7 +284,7 @@ int open(const char* path, int flags, ...)
 	porg_init();
 	
 	va_start(a, flags);
-	mode = va_arg(a, mode_t);
+	mode = va_arg(a, int);
 	va_end(a);
 	
 	if ((ret = libc_open(path, flags, mode)) != -1) {
@@ -381,8 +380,7 @@ FILE* freopen(const char* path, const char* mode, FILE* stream)
 int open64(const char* path, int flags, ...)
 {
 	va_list a;
-	mode_t mode;
-	int accmode, ret;
+	int mode, accmode, ret;
 	
 	if (!porg_tmpfile && path && !strncmp(path, "/proc/", 6))
 		return __open64(path, flags);
@@ -390,7 +388,7 @@ int open64(const char* path, int flags, ...)
 	porg_init();
 	
 	va_start(a, flags);
-	mode = va_arg(a, mode_t);
+	mode = va_arg(a, int);
 	va_end(a);
 	
 	if ((ret = libc_open64(path, flags, mode)) != -1) {
@@ -451,14 +449,13 @@ FILE* freopen64(const char* path, const char* mode, FILE* stream)
 int openat(int fd, const char* path, int flags, ...)
 {
 	va_list a;
-	mode_t mode;
-	int accmode, ret;
+	int mode, accmode, ret;
 	static char abs_path[PORG_BUFSIZE];
 
 	porg_init();
 	
 	va_start(a, flags);
-	mode = va_arg(a, mode_t);
+	mode = va_arg(a, int);
 	va_end(a);
 	
 	if ((ret = libc_openat(fd, path, flags, mode)) != -1) {
@@ -533,14 +530,13 @@ int symlinkat(const char* oldpath, int newfd, const char* newpath)
 int openat64(int fd, const char* path, int flags, ...)
 {
 	va_list a;
-	mode_t mode;
-	int accmode, ret;
+	int mode, accmode, ret;
 	static char abs_path[PORG_BUFSIZE];
 
 	porg_init();
 	
 	va_start(a, flags);
-	mode = va_arg(a, mode_t);
+	mode = va_arg(a, int);
 	va_end(a);
 	
 	if ((ret = libc_openat64(fd, path, flags, mode)) != -1) {

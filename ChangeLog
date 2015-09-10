@@ -7,6 +7,8 @@ SVN
 	  installation). Experimental. Please report any error.
 	+ Removed /mnt, /media and /cdrom from the default EXCLUDE (thanks
 	  Tomoaki Nishiyama).
+	+ Replace mode_t by int when calling va_arg() so that the code compiles
+	  in OSX 10.6 (thanks Tomoaki Nishiyama).
 	+ Allow lowercase variable names in porgrc (like 'include=...').
 
 	Changes in grop:
