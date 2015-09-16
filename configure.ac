@@ -120,7 +120,7 @@ if test "$GCC" = yes; then
 fi
 
 if test "$GXX" = yes; then
-	MY_CXXFLAGS="$MY_CXXFLAGS -ansi -pedantic -Wno-long-long -Wmissing-declarations -fno-operator-names -Wall"
+	MY_CXXFLAGS="$MY_CXXFLAGS -ansi -pedantic -Wall -fno-operator-names -std=c++11"
 fi
 
 if echo "$PACKAGE_VERSION" | grep -q svn; then
