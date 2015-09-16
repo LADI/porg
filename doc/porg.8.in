@@ -142,7 +142,7 @@ Use the name of the current directory as the name of the package to be logged.
 .TP
 \fB-E, --exclude\fR=\fIPATH1:PATH2:...\fR
 Colon-separated list of paths to skip when logging the installed files. Default 
-is '@EXCLUDE@', unless variable EXCLUDE is set in the configuration file 
+is '@EXCLUDE@', unless variable \fBexclude\fR is set in the configuration file 
 (type 'man porgrc' for more information).
 .br
 Shell wildcards are allowed in the PATHs. See \fIPATH MATCHING\fR below for
@@ -150,7 +150,7 @@ more details.
 .TP
 \fB-I, --include\fR=\fIPATH1:PATH2:...\fR
 Colon-separated list of paths to scan when logging the installed files. Default 
-is '/', unless variable INCLUDE is set in the configuration file 
+is '/', unless variable \fBinclude\fR is set in the configuration file 
 (type 'man porgrc' for more information).
 .br
 Shell wildcards are allowed in the PATHs. See \fIPATH MATCHING\fR below for
@@ -180,7 +180,7 @@ to all questions).
 .TP
 \fB-e, --skip\fR=\fIPATH1:PATH2:...\fR
 Colon-separated list of paths to skip when removing a package. Default is '' 
-(all logged files are removed), unless variable REMOVE_SKIP is set in the 
+(all logged files are removed), unless variable \fBremove_skip\fR is set in the 
 configuration file (type 'man porgrc' for more information).
 .br
 Shell wildcards are allowed in the PATHs. See \fIPATH MATCHING\fR for
