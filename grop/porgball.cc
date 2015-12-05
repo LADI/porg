@@ -334,7 +334,7 @@ bool Grop::Porgball::spawn(std::vector<string>& argv)
 	Glib::RefPtr<Glib::IOChannel> io = Glib::IOChannel::create_from_fd(std_err);
 	io->set_close_on_unref(true);
 
-	while (!m_close && waitpid(m_pid, &status, WNOHANG) != m_pid) {
+	while (!m_close && waitpid(m_pid, &status, WNOHANG) != -1) {
 		m_progressbar.pulse();
 		main_iter();
 		g_usleep(2000);	
