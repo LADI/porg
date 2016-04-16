@@ -19,6 +19,10 @@ EXTRA_DIST = \
 logdir = \
 	$(DESTDIR)@LOGDIR@
 
+svnurl = \
+	svn+ssh://davidrr@svn.code.sf.net/p/porg/code
+
+
 ## Create the porg log directory on install, if it does not exist
 install-exec-local:
 	test -d $(logdir) || $(mkinstalldirs) $(logdir)
@@ -39,14 +43,14 @@ logme-really:
 	done && \
 	echo && porg -vvxfsty porg-$(PACKAGE_VERSION)
 
-## Download SVN snapshot (Read Only)
-svn-ro:
-	svn checkout svn://svn.code.sf.net/p/porg/code/ porg-code
-
-## Download SVN snapshot (Read / Write)
-svn-rw:
-	svn checkout --username=davidrr svn+ssh://davidrr@svn.code.sf.net/p/porg/code/ porg-code
-
 README: doc/index.html
 	html2text $< | $(SED) 's/&ast;/*/g' > README
+
+## Download SVN snapshot (Read / Write)
+svn-checkout:
+	svn checkout --username=davidrr $(svnurl) porg-code
+
+## Make release tag
+svn-release-tag:
+	svn copy $(svnurl)/trunk $(svnurl)/tags/$(PACKAGE_VERSION) -m "Created tag $(PACKAGE_VERSION)"
 
