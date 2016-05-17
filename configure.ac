@@ -2,10 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_INIT([porg],[0.10],[http://porg.sourceforge.net])
+AC_INIT([porg],[svn],[http://porg.sourceforge.net])
 
-RELEASEDATE="17 May 2016"
-#RELEASEDATE="`date +'%d %B %Y'`"
+#RELEASEDATE="17 May 2016"
+RELEASEDATE="`date +'%d %B %Y'`"
 
 AC_CONFIG_SRCDIR([porg/main.cc])
 AC_CONFIG_HEADERS([config.h])
