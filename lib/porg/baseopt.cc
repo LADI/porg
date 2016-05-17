@@ -9,6 +9,7 @@
 #include "config.h"
 #include "baseopt.h"
 #include "rexp.h"
+#include "common.h"
 #include <wordexp.h>
 #include <fstream>
 
@@ -36,7 +37,7 @@ BaseOpt::BaseOpt()
 
 		if (re.exec(buf)) {
 			
-			opt = re.match(1);
+			opt = Porg::to_lower(re.match(1));
 			val = re.match(2);
 			
 			if (opt == "logdir")

@@ -1,3 +1,4 @@
+
 [p*org]
 
 
@@ -101,7 +102,7 @@ The porg distribution provides the following auxiliary scripts:
 
 * License *
 
-Copyright © 2015 David Ricart.
+Copyright © 2016 David Ricart.
 Porg is protected by the GNU General Public License.
 Look at the COPYING file for more details.
 
@@ -116,4 +117,5 @@ porg. A complete list of them can be found in the AUTHORS file.
 
 
 ===============================================================================
+
 

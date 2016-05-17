@@ -9,6 +9,7 @@
 #include "config.h"
 #include "opt.h"
 #include "out.h"
+#include "porg/common.h"
 #include <getopt.h>
 
 using std::string;
@@ -22,7 +23,6 @@ static void help();
 static void version();
 static string get_dir_name();
 static void die_help(string const& msg = "");
-static string to_lower(string const& str);
 
 
 bool Opt::s_all_pkgs = false;
@@ -196,8 +196,8 @@ Opt::Opt(int argc, char* argv[])
 			case OPT_SKIP:				s_remove_skip = optarg; break;
 			case OPT_BATCH:				s_remove_batch = true; break;
 			case OPT_UNLOG:				s_remove_unlog = true; break;
-			case OPT_PACKAGE:			s_log_pkg_name = to_lower(optarg); break;
-			case OPT_DIRNAME:			s_log_pkg_name = to_lower(get_dir_name()); break;
+			case OPT_PACKAGE:			s_log_pkg_name = Porg::to_lower(optarg); break;
+			case OPT_DIRNAME:			s_log_pkg_name = Porg::to_lower(get_dir_name()); break;
 			case OPT_INCLUDE:			s_include = optarg; break;
 			case OPT_EXCLUDE:			s_exclude = optarg; break;
 			case OPT_APPEND:			s_log_append = true; break;
@@ -340,7 +340,7 @@ Opt::Opt(int argc, char* argv[])
 
 			// convert package names to lower case
 			for (uint i(0); i < s_args.size(); ++i)
-				s_args[i] = to_lower(s_args[i]);
+				s_args[i] = Porg::to_lower(s_args[i]);
 	}
 }
 
@@ -482,19 +482,5 @@ static void die_help(string const& msg /* = "" */)
 {
 	string str = msg.empty() ? "" : msg + "\n";
 	throw Error(str + "Try 'porg --help' for more information");
-}
-
-
-//
-// convert a string to lowercase
-//
-static string to_lower(string const& str)
-{
-	string low(str);
-
-	for (uint i(0); i < low.size(); ++i)
-		low[i] = tolower(low[i]);
-
-	return low;
 }
 

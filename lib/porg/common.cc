@@ -125,6 +125,20 @@ string Porg::strip_trailing(string const& str, char c)
 
 
 //
+// convert a string to lowercase
+//
+string Porg::to_lower(string const& str)
+{
+	string low(str);
+
+	for (uint i(0); i < low.size(); ++i)
+		low[i] = tolower(low[i]);
+
+	return low;
+}
+
+
+//
 // Generic exception with errno support
 //
 Porg::Error::Error(string const& msg, int errno_ /* = 0 */)

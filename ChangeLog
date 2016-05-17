@@ -1,3 +1,11 @@
+Version 0.10 (17 May 2016)
+--------------------------
+
+	+ Fixed bug: Make variable names in porgrc file really case 
+	  insensitive. Now, "LOGDIR", "logdir" and "LogDiR" are all
+	  valid and equivalent (thanks Alain Bureau).
+
+
 Version 0.9 (16 April 2016)
 ---------------------------
 
