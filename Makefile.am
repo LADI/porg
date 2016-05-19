@@ -32,8 +32,8 @@ logme_files = \
 
 logme:
 	@echo "'make logme' is no longer required to log the own porg installation."
-	@echo "Try 'porg -lp porg-$(PACKAGE_VERSION) make install' instead."
-	@echo "If it fails, try 'make logme-really' and report it, please."
+	@echo "Try 'sudo porg -lp porg-$(PACKAGE_VERSION) make install' instead."
+	@echo "If it fails, try 'sudo make logme-really' and report it, please."
 
 ## A rule to log the own porg's installation
 logme-really:
