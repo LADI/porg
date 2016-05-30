@@ -154,13 +154,7 @@ void Grop::Porgball::instance(Pkg const& pkg, Window& parent)
 
 void Grop::Porgball::on_cancel()
 {
-	g_return_if_fail(m_pid > 0);
-
-	if (m_pid)
-		kill(m_pid, SIGKILL);
-
-	m_button_cancel->hide();
-	m_button_ok->show();
+	on_delete_event(0);
 }
 
 
