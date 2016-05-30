@@ -12,7 +12,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build])
 AC_CONFIG_MACRO_DIR([build])
 
-AM_INIT_AUTOMAKE([-Wall foreign no-installinfo no-texinfo.tex dist-xz no-dist-gzip])
+AM_INIT_AUTOMAKE([-Wall foreign no-installinfo no-texinfo.tex])
 AM_MAINTAINER_MODE
 
 AC_CONFIG_FILES([ \
