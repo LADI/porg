@@ -13,9 +13,6 @@ SUBDIRS = \
 pkgdata_DATA = \
 	README
 
-EXTRA_DIST = \
-	ChangeLog.paco
-
 logdir = \
 	$(DESTDIR)@LOGDIR@
 
