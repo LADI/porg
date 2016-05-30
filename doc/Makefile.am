@@ -3,7 +3,6 @@
 
 EXTRA_DIST = \
 	grop.desktop \
-	faq.txt \
 	porg.png \
 	porg.spec \
 	download.png \
@@ -20,8 +19,7 @@ pkgdata_DATA = \
 	porgrc \
 	index.html \
 	porg.png \
-	download.png \
-	faq.txt
+	download.png
 
 logme_files = \
 	$(DESTDIR)$(man5dir)/porgrc.5 \
@@ -31,8 +29,7 @@ logme_files = \
 	$(DESTDIR)$(pkgdatadir)/porgrc \
 	$(DESTDIR)$(pkgdatadir)/index.html \
 	$(DESTDIR)$(pkgdatadir)/porg.png \
-	$(DESTDIR)$(pkgdatadir)/download.png \
-	$(DESTDIR)$(pkgdatadir)/faq.txt
+	$(DESTDIR)$(pkgdatadir)/download.png
 
 if ENABLE_GROP
 

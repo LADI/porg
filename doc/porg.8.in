@@ -163,7 +163,7 @@ option porg registers also the missing files.
 .TP
 \fB-+, --append\fR
 With \fB-p\fR or \fB-D\fR, if the package is already registered, append the list
-of created files to its log.
+of created files to the database.
 
 .SH PACKAGE REMOVE OPTIONS
 .TP
@@ -232,17 +232,17 @@ Use single quotes if the command already contains double quotes:
 	porg -lp foo-1.0 'echo "hello world" > /var/log/foo.log'
 .PP
 Alternatively, we can use the basename of the current directory as the name of
-the package to be logged, using the option \fB-D\fR instead of \fB-p\fR:
+the package to be installed, by using the option \fB-D\fR instead of \fB-p\fR:
 .PP
     porg -lD "make install && make install.man"
 .PP
-If we have forgotten to install a file, it can be added to a previously
-created log with the option \fB-+\fR:
+If we have forgotten to install a file, it can be added to the database with
+the option \fB-+\fR:
 .PP
     porg -lp+ foo-1.0 "install bar /bin/bar"
 .PP
 Note that the option \fB-+\fR cannot be used to remove a file from the
-log. For instance, the following command:
+database. For instance, the following command:
 .PP
     porg -lp+ foo-1.0 "rm /bin/bar"
 .PP
@@ -257,13 +257,13 @@ be installed in /usr/bin/bar instead. If one runs this:
 .br
     porg -lp+ foo-1.0 "mv /bin/bar /usr/bin/bar"
 .PP
-Both files, /bin/bar and /usr/bin/bar remain in the log. This is
+Both files, /bin/bar and /usr/bin/bar remain in the database. This is
 usually not the desired behaviour. As a workaround one can join up
 both commands in one single porg run:
 .PP
     porg -lp foo-1.0 "make install && mv /bin/bar /usr/bin/bar"
 .PP
-In this case only /usr/bin/bar is logged.
+In this case only /usr/bin/bar is registered.
 .PP
 To remove the package foo-3.3, keeping the files in /etc and the files
 ending with ".conf":
@@ -271,10 +271,25 @@ ending with ".conf":
     porg -r -e '/etc:*.conf' foo-3.3
 .PP
 You have installed the package 'boo-1.9' in prefix '/opt/boo-1.9', but
-you haven't logged the installation with porg. No problem! Just create a log
-for it thusly:
+you haven't kept track of the installation with porg. No problem! Just 
+create a log for it thusly:
 .PP
     find /opt/boo-1.9 | porg -lp boo-1.9
+.PP
+Note that all commands that require root permission must be run as root,
+or by using \fBsudo\fR, for instance:
+.PP
+	sudo porg -lp funpack-2.0 make install
+.PP
+Do not try to wrap a sudo command with porg, like this:
+.PP
+	porg -lp funpack-2.0 "sudo make install"
+.PP
+If you do that, you won't get any error, and the package would be actually
+installed, but porg would'nt be able to monitor the installation and no
+files would be logged.
+.br
+This is due to LD_PRELOAD limitations on suid programs like sudo.
 .PP
 By the way, porg internally converts all package names to lower case; 'FooBar'
 and 'foobar' are the same package.
