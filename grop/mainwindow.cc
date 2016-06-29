@@ -223,7 +223,7 @@ void MainWindow::on_about()
 	dialog.set_transient_for(*this);
 	dialog.set_name("grop");
 	dialog.set_logo_default();
-	dialog.set_version("Version " PACKAGE_VERSION " (" RELEASEDATE ")");
+	dialog.set_version("Version " PORG_VERSION " (" RELEASEDATE ")");
 	dialog.set_comments("Graphic interface of porg,\na source code package organizer");
 	dialog.set_authors(std::vector<Glib::ustring>(1, "David Ricart"));
 	dialog.set_website(PACKAGE_BUGREPORT);

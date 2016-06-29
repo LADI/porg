@@ -2,10 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 
-AC_INIT([porg],[svn],[http://porg.sourceforge.net])
-
-#RELEASEDATE="17 May 2016"
-RELEASEDATE="`date +'%d %B %Y'`"
+AC_INIT([porg],[[]],[http://porg.sourceforge.net])
 
 AC_CONFIG_SRCDIR([porg/main.cc])
 AC_CONFIG_HEADERS([config.h])
@@ -40,13 +37,22 @@ AC_USE_SYSTEM_EXTENSIONS
 # Set configure options
 #=======================
 
-if echo "$PACKAGE_VERSION" | grep -q svn; then
+
+if test -z "$PACKAGE_VERSION"; then
+	# development
+	PORG_VERSION="r`svn info --show-item revision | sed 's/ *//g'`"
 	AC_DEFINE([GTK_DISABLE_DEPRECATED], [1], [Disable gtkmm-2.4 API])
 else
+	# stable release
+	PORG_VERSION="$PACKAGE_VERSION"
 	AC_DEFINE([NDEBUG], [1], [Disable libc assertions])
 ##	AC_DEFINE([G_DISABLE_ASSERT], [1], [Disable glib assertions])
 fi
 
+AC_DEFINE_UNQUOTED([PORG_VERSION], ["$PORG_VERSION"], [Release version])
+AC_SUBST([PORG_VERSION])
+
+RELEASEDATE="`date +'%d %B %Y'`"
 AC_DEFINE_UNQUOTED([RELEASEDATE], ["$RELEASEDATE"], [Release date])
 AC_SUBST([RELEASEDATE])
 
@@ -123,7 +129,8 @@ if test "$GXX" = yes; then
 	MY_CXXFLAGS="$MY_CXXFLAGS -ansi -pedantic -Wall -fno-operator-names -std=c++11 -Wno-deprecated-declarations"
 fi
 
-if echo "$PACKAGE_VERSION" | grep -q svn; then
+if test -z "$PACKAGE_VERSION"; then
+	# on development enable -Werror flag
 	MY_CFLAGS="$MY_CFLAGS -Werror"
 	MY_CXXFLAGS="$MY_CXXFLAGS -Werror"
 fi

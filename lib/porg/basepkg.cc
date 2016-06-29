@@ -167,7 +167,7 @@ void BasePkg::write_log() const
 
 	// write info header
 
-	of	<< "#!porg-" PACKAGE_VERSION "\n"
+	of	<< "#!porg-" PORG_VERSION "\n"
 		<< '#' << CODE_DATE 		<< ':' << m_date << '\n'
 		<< '#' << CODE_SIZE 		<< ':' << std::setprecision(0) << std::fixed << m_size << '\n'
 		<< '#' << CODE_NFILES       << ':' << m_nfiles << '\n'

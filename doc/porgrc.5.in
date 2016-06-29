@@ -4,7 +4,7 @@
 .\" Copyright (C) 2015 David Ricart <@PACKAGE_BUGREPORT@>
 .\"----------------------------------------------------------------
 
-.TH porgrc "5" "@RELEASEDATE@" "porg @PACKAGE_VERSION@" "System"
+.TH porgrc "5" "@RELEASEDATE@" "porg @PORG_VERSION@" "System"
 .SH NAME
 porgrc - configuration file for porg
 .SH SYNOPSIS

@@ -36,5 +36,5 @@ logme_files = \
 	$(DESTDIR)$(bindir)/porg
 
 logme:
-	ls $(logme_files) | porg -lp+ porg-$(PACKAGE_VERSION)
+	ls $(logme_files) | porg -lp+ porg-$(PORG_VERSION)
 
