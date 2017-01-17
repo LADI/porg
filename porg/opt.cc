@@ -460,7 +460,7 @@ cout <<
 
 static void version()
 {
-	cout << "porg-" PORG_VERSION " (" RELEASEDATE ")\n"
+	cout << "porg-" PACKAGE_VERSION " (" RELEASEDATE ")\n"
 		"Written by David Ricart <" PACKAGE_BUGREPORT ">" << endl;
 
 	exit(EXIT_SUCCESS);

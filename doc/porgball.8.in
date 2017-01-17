@@ -4,7 +4,7 @@
 .\" Copyright (C) 2015 David Ricart <@PACKAGE_BUGREPORT@>
 .\"----------------------------------------------------------------
 .\"
-.TH PORGBALL "8" "@RELEASEDATE@" "porg @PORG_VERSION@" "System"
+.TH PORGBALL "8" "@RELEASEDATE@" "porg @PACKAGE_VERSION@" "System"
 .SH NAME
 porgball - Binary package support for porg(8).
 .SH SYNOPSIS

@@ -29,16 +29,16 @@ logme_files = \
 
 logme:
 	@echo "'make logme' is no longer required to log the own porg installation."
-	@echo "Try 'sudo porg -lp porg-$(PORG_VERSION) make install' instead."
+	@echo "Try 'sudo porg -lp porg-$(PACKAGE_VERSION) make install' instead."
 	@echo "If it fails, try 'sudo make logme-really' and report it, please."
 
 ## A rule to log the own porg's installation
 logme-really:
-	ls $(logme_files) | porg -lp porg-$(PORG_VERSION) && \
+	ls $(logme_files) | porg -lp porg-$(PACKAGE_VERSION) && \
 	for dir in $(SUBDIRS); do \
 	  ( cd $$dir && $(MAKE) logme ) 2>/dev/null; \
 	done && \
-	echo && porg -vvxfsty porg-$(PORG_VERSION)
+	echo && porg -vvxfsty porg-$(PACKAGE_VERSION)
 
 README: doc/index.html
 	html2text $< | $(SED) 's/&ast;/*/g' > README

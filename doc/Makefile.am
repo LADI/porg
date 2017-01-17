@@ -70,8 +70,8 @@ install-data-local: porgrc
 	touch $$rc_file
 
 logme:
-	ls $(logme_files) | porg -lp+ porg-$(PORG_VERSION) && \
-	$(SED) -i "s|^#i:.*|#i:$(porg_icon_path)|" $(logdir)/porg-$(PORG_VERSION)
+	ls $(logme_files) | porg -lp+ porg-$(PACKAGE_VERSION) && \
+	$(SED) -i "s|^#i:.*|#i:$(porg_icon_path)|" $(logdir)/porg-$(PACKAGE_VERSION)
 
 web: index.html
 	scp $< davidrr,porg@web.sourceforge.net:htdocs/

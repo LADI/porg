@@ -18,5 +18,5 @@ logme_files = \
 	$(DESTDIR)$(bindir)/porgball
 
 logme:
-	ls $(logme_files) | porg -lp+ porg-$(PORG_VERSION)
+	ls $(logme_files) | porg -lp+ porg-$(PACKAGE_VERSION)
 
