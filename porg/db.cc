@@ -338,7 +338,7 @@ static int get_digits(ulong n)
 {
 	int ret;
 	for (ret = 0; n; n /= 10, ret++) ;
-	return ret;
+	return max(1, ret);
 }
 
 

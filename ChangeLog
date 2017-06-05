@@ -1,3 +1,9 @@
+SVN
+---
+
+	+ porg: Function get_digits(): Return 1 when input number is 0.
+
+
 Version 0.10 (17 May 2016)
 --------------------------
 
