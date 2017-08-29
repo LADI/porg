@@ -1,6 +1,9 @@
 SVN
 ---
 
+	+ Added flag '-Wno-nonnull-compare' to C++ compiler, to avoid
+	  unnecessary warnings (thanks Bat Guano).
+
 	+ porg: Function get_digits(): Return 1 when input number is 0.
 
 
