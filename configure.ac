@@ -116,7 +116,7 @@ MY_CFLAGS=-W
 MY_CXXFLAGS=-W
 
 if test "$GCC" = yes; then
-	MY_CFLAGS="$MY_CFLAGS -ansi -Wshadow -Wmissing-declarations -Wall"
+	MY_CFLAGS="$MY_CFLAGS -ansi -Wshadow -Wmissing-declarations -Wall -Wno-nonnull-compare"
 fi
 
 if test "$GXX" = yes; then
