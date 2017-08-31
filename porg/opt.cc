@@ -205,7 +205,7 @@ Opt::Opt(int argc, char* argv[])
 
 			// unrecognized option
 			
-			case '?': die_help();
+			case '?': die_help(); break;
 
 			// should have been case'd all recognized options
 
